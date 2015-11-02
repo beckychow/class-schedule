@@ -5,15 +5,21 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.concurrent.ExecutionException;
 
 public class MajorChoiceActivity extends AppCompatActivity {
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_major_choice);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -26,6 +32,23 @@ public class MajorChoiceActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        try {
+            changeText();
+        } catch (Exception e)
+        {
+            Log.e("MajorChoiceActivity", "changeText()" + e);
+        }
+    }
+
+    private void changeText() throws ExecutionException, InterruptedException{
+        /*FetchDataFromHttp fetchDataFromHttp = new FetchDataFromHttp(getApplicationContext(),
+                "http://www.ucsd.edu/catalog/courses/CSE.html");
+        final TextView textView = (TextView) this.findViewById(R.id.message);
+        textView.setText(fetchDataFromHttp.getResults());*/
+        CourseDescriptionParser cdp = new CourseDescriptionParser(this,
+                                            "http://www.ucsd.edu/catalog/courses/CSE.html");
+        cdp.parseContentToDB();
     }
 
     @Override

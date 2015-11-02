@@ -17,8 +17,9 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Created by Huayin Zhou on 10/24/15.
- *
+ * Class FetchDataFromHttp is to get the html text from a given URL and return as String
  */
+
 public class FetchDataFromHttp {
     private static final String DEBUG_TAG = "FetchDataFromHttp";
     private String results;
