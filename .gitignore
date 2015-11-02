@@ -1,0 +1,14 @@
+# built app files
+build/
+/*/build
+
+# local configuration file
+local.properties
+
+# gradle generated files
+.gradle/
+
+# OS-related
+.DS_Store
+.Trashes
+Thumbs.db
