@@ -4,10 +4,12 @@ import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContract;
@@ -30,10 +33,11 @@ public class ListViewLoader extends ListActivity
     SimpleCursorAdapter mAdapter;
 
     //There are the Courses rows that we will retrieve
-    static final String[] PROJECTION = new String[] {CoursesCollectionContract.Course._ID,
+    static final String[] PROJECTION = new String[] {
+            CoursesCollectionContract.Course._ID,
             CoursesCollectionContract.Course.COLUMN_DEPARTMENT,
             CoursesCollectionContract.Course.COLUMN_CODE,
-            CoursesCollectionContract.Course.COLUMN_TITLE};
+            CoursesCollectionContract.Course.COLUMN_TITLE };
 
     // This is the select criteria
     static final String SELECTION = "";
@@ -57,17 +61,16 @@ public class ListViewLoader extends ListActivity
         String[] fromColumns = {
                 CoursesCollectionContract.Course.COLUMN_DEPARTMENT,
                 CoursesCollectionContract.Course.COLUMN_CODE,
-                CoursesCollectionContract.Course.COLUMN_TITLE };
+                CoursesCollectionContract.Course.COLUMN_TITLE,
+                CoursesCollectionContract.Course._ID };
         int[] toViews = {
-                R.id.text_department,
-                R.id.text_code,
-                R.id.text_title };
+                R.id.list_text_department,
+                R.id.list_text_code,
+                R.id.list_text_title,
+                R.id.list_text_id };
 
         // Create an empty adapter we will use to display the loaded data.
         // We pass null for the cursor, then update it in onLoadFinished()
-        /*mAdapter = new SimpleCursorAdapter(this, R.layout.course_list_view, null,
-                fromColumns, toViews, 0);
-        */
         mAdapter = new SimpleCursorAdapter(this, R.layout.course_list_view, null,
                 fromColumns, toViews, 0);
         setListAdapter(mAdapter);
@@ -103,6 +106,18 @@ public class ListViewLoader extends ListActivity
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Do something when a list item is clicked
+        super.onListItemClick(l, v, position, id);
+        Intent intent = new Intent(this, CourseDetailedView.class);
+        TextView courseIDView = (TextView) v.findViewById(R.id.list_text_id);
+        Uri courseUri = Uri.withAppendedPath(CoursesContentProvider.CONTENT_URI, courseIDView.getText().toString());
+
+        //Log.e(getClass().getSimpleName() ,"Uri id = " + courseIDView.getText().toString());
+
+        intent.putExtra(CoursesContentProvider.CONTENT_ITEM_TYPE, courseUri);
+
+        //Log.e(getClass().getSimpleName(), "Uri = " + courseUri.toString());
+
+        startActivity(intent);
     }
 
 

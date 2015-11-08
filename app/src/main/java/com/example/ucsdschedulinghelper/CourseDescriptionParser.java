@@ -146,7 +146,6 @@ public class CourseDescriptionParser extends MyHtmlParser {
 
     private void addToDatabase(String id, String department, String code, String title,
                                String description, String units, boolean update) {
-        // TODO: implement updating algorithm for existing content
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -163,7 +162,10 @@ public class CourseDescriptionParser extends MyHtmlParser {
             long newRowId = db.insert(Course.TABLE_NAME, "null", values);
             once = false;
         }*/
-        contentResolver.insert(CoursesContentProvider.CONTENT_URI, values);
+        String selection = "entryid LIKE ?";
+        String[] selectionArgs = { id };
+        contentResolver.update(CoursesContentProvider.CONTENT_URI, values,
+                selection, selectionArgs);
 
     }
 }

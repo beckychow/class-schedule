@@ -27,6 +27,11 @@
             android:label="ListViewLoader">
         </activity>
 
+        <activity
+            android:name="com.example.ucsdschedulinghelper.ui.courseListView.CourseDetailedView"
+            android:label="CourseDetailedView">
+        </activity>
+
         <provider
             android:name=".provider.CoursesContentProvider"
             android:authorities="com.example.ucsdschedulinghelper.provider"

@@ -1,6 +1,7 @@
 package com.example.ucsdschedulinghelper.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -28,6 +29,7 @@ public class CoursesContentProvider extends ContentProvider {
     private static final String BASE_PATH = "courses";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/course";
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     /**
@@ -106,7 +108,7 @@ public class CoursesContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         // TODO: update already existing items based on entryid's
-        // if (rowsUpdated == 0) db.insert(Course.TABLE_NAME, null, values);
+        if (rowsUpdated == 0) db.insert(Course.TABLE_NAME, null, values);
         getContext().getContentResolver().notifyChange(uri, null);
         return rowsUpdated;
     }
@@ -134,7 +136,7 @@ public class CoursesContentProvider extends ContentProvider {
                  * present. Get the last path segment from the URI, this is the _ID value.
                  * Then, append the value to the WHERE clause for the query.
                  */
-                selection = selection + "_ID = " + uri.getLastPathSegment();
+                selection = "_id = " + uri.getLastPathSegment();
                 break;
 
             default:

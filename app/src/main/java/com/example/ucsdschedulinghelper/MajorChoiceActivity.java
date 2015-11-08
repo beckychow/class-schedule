@@ -76,7 +76,7 @@ public class MajorChoiceActivity extends AppCompatActivity {
     }
 
     private static final int REQUEST_CODE = 01;
-    public void onClick(View view) {
+    public void showCourseList(View view) {
         Intent intent = new Intent(this, ListViewLoader.class);
         startActivity(intent);
     }
