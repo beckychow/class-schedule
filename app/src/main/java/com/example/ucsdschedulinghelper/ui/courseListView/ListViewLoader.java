@@ -16,11 +16,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 
+import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContract;
 import com.example.ucsdschedulinghelper.provider.CoursesContentProvider;
 
 /**
- * Created by Sp0t on 5/11/15.
+ * Created by SKE on 5/11/15.
  */
 public class ListViewLoader extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -31,10 +32,11 @@ public class ListViewLoader extends ListActivity
     //There are the Courses rows that we will retrieve
     static final String[] PROJECTION = new String[] {CoursesCollectionContract.Course._ID,
             CoursesCollectionContract.Course.COLUMN_DEPARTMENT,
-            CoursesCollectionContract.Course.COLUMN_CODE};
+            CoursesCollectionContract.Course.COLUMN_CODE,
+            CoursesCollectionContract.Course.COLUMN_TITLE};
 
     // This is the select criteria
-    static final String SELECTION = "null";
+    static final String SELECTION = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +54,21 @@ public class ListViewLoader extends ListActivity
         root.addView(progressBar);
 
         // For the cursor adapter, specify which columns go into which views
-        String[] fromColumns = {CoursesCollectionContract.Course.COLUMN_ENTRY_ID};
-        int[] toViews = {android.R.id.text1};
+        String[] fromColumns = {
+                CoursesCollectionContract.Course.COLUMN_DEPARTMENT,
+                CoursesCollectionContract.Course.COLUMN_CODE,
+                CoursesCollectionContract.Course.COLUMN_TITLE };
+        int[] toViews = {
+                R.id.text_department,
+                R.id.text_code,
+                R.id.text_title };
 
         // Create an empty adapter we will use to display the loaded data.
         // We pass null for the cursor, then update it in onLoadFinished()
         /*mAdapter = new SimpleCursorAdapter(this, R.layout.course_list_view, null,
                 fromColumns, toViews, 0);
         */
-        mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, null,
+        mAdapter = new SimpleCursorAdapter(this, R.layout.course_list_view, null,
                 fromColumns, toViews, 0);
         setListAdapter(mAdapter);
 

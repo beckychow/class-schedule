@@ -8,12 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContract.Course;
 import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionDbHelper;
 
 /**
- * Created by Sp0t on 6/11/15.
+ * Created by SKE on 6/11/15.
  */
 public class CoursesContentProvider extends ContentProvider {
 
@@ -43,13 +44,13 @@ public class CoursesContentProvider extends ContentProvider {
         return true;
     }
 
-    // Implements the provider's insert method
     public Uri insert(Uri uri, ContentValues values) {
         long id = 0;
         db = mDbHelper.getWritableDatabase();
 
         switch (sUriMatcher.match(uri)) {
             case COURSES:
+
                 id = db.insert(Course.TABLE_NAME, null, values);
                 break;
             default:
@@ -104,6 +105,8 @@ public class CoursesContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
+        // TODO: update already existing items based on entryid's
+        // if (rowsUpdated == 0) db.insert(Course.TABLE_NAME, null, values);
         getContext().getContentResolver().notifyChange(uri, null);
         return rowsUpdated;
     }
@@ -139,6 +142,7 @@ public class CoursesContentProvider extends ContentProvider {
                 break;
         }
         db = mDbHelper.getWritableDatabase();
+
         Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs,
                 null, null, sortOrder);
 

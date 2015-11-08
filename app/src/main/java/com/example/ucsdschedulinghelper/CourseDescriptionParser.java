@@ -159,11 +159,11 @@ public class CourseDescriptionParser extends MyHtmlParser {
 
         // Insert the new row, returning the primary key value of the new row
         // long newRowId = db.insert(Course.TABLE_NAME, "null", values);
-        if (once) {
+        /*if (once) {
             long newRowId = db.insert(Course.TABLE_NAME, "null", values);
             once = false;
-        }
-        // contentResolver.insert(Uri.withAppendedPath(CoursesContentProvider.CONTENT_URI, "1"), values);
+        }*/
+        contentResolver.insert(CoursesContentProvider.CONTENT_URI, values);
 
     }
 }
