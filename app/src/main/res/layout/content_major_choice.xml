@@ -12,12 +12,83 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_major_choice" tools:context=".MajorChoiceActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_horizontal_margin"
+        android:layout_gravity="center"
+        android:text="@string/choose_major"/>
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_vertical_margin">
+        <RadioButton android:id="@+id/cs_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/computer_science"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/cs_bio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cs_bio"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/comp_eng_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/computer_engineering"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/cs_ba_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/computer_science_ba"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_horizontal_margin"
+        android:layout_gravity="center"
+        android:text="@string/choose_quarter"/>
+    <Spinner
+        android:id="@+id/quarter_grad_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:spinnerMode="dropdown"
+        android:entries="@array/grad_quarter"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_horizontal_margin"
+        android:layout_gravity="center"
+        android:text="@string/choose_year"/>
+    <Spinner
+        android:id="@+id/year_grad_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:spinnerMode="dropdown"
+        android:entries="@array/grad_year"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp"/>
+
     <Button android:id="@+id/buttonToListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View list"
+        android:text="@string/submit"
         android:onClick="showCourseList"
-        android:layout_gravity="top"
+        android:layout_gravity="center"
         />
 
     <TextView android:id="@+id/message"
@@ -27,6 +98,7 @@
         android:scrollbars="vertical"
         android:typeface="monospace"
         android:layout_gravity="center"
+        android:visibility="invisible"
         />
 
 </LinearLayout>

@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 
 import java.util.concurrent.ExecutionException;
 
@@ -26,14 +29,14 @@ public class MajorChoiceActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         try {
             changeText();
@@ -80,5 +83,28 @@ public class MajorChoiceActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ListViewLoader.class);
         startActivity(intent);
     }
+
+    // Selecting major through Radio Buttons
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.cs_button:
+                if (checked)
+                    break;
+            case R.id.cs_bio_button:
+                if (checked)
+                    break;
+            case R.id.comp_eng_button:
+                if (checked)
+                    break;
+            case R.id.cs_ba_button:
+                if (checked)
+                    break;
+        }
+    }
+
 
 }
