@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.ucsdschedulinghelper.provider.CoursesContentProvider;
@@ -49,6 +50,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
             final String ID_TAG = "<a id=\"";
             final String NAME_TAG = "<p class=\"course-name\">";
             final String DESCRIPTION_TAG = "<p class=\"course-descriptions\">";
+            final String PREREQUISITES_TAG = "<strong class=\"italic\">Prerequisites:</strong>";
 
             // Lower division, Upper division, Graduate
             int index = content.indexOf(DIVISION_TAG);
@@ -59,7 +61,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
                 // get description for each class in one division
                 while (index < next_idx) {
                     int tmp_idx;
-                    String id, fullCode, title, description, units;
+                    String id, fullCode, title, description, units, prerequisites;
 
                     // get course id
                     index = content.indexOf(ID_TAG, index) + ID_TAG.length();
@@ -82,15 +84,20 @@ public class CourseDescriptionParser extends MyHtmlParser {
                     index = tmp_idx + 1;
                     tmp_idx = content.indexOf(')', index);
                     units = content.substring(index, tmp_idx);
-                    /** unit = Integer.parseInt(content.substring(index, tmp_idx)); */
 
                     // get course description
                     index = content.indexOf(DESCRIPTION_TAG, index) + DESCRIPTION_TAG.length();
-                    tmp_idx = content.indexOf("<strong", index) - 1;
+                    //tmp_idx = content.indexOf("<strong", index) - 1;
+                    tmp_idx = content.indexOf(PREREQUISITES_TAG, index) - 1;
                     description = content.substring(index, tmp_idx);
                     description = removeInsideTags(description);
                     description = removeExtraSpaces(description);
+
                     // TODO: get prerequisites
+                    index = content.indexOf(PREREQUISITES_TAG, index) + PREREQUISITES_TAG.length();
+                    tmp_idx = content.indexOf("</p>", index);
+                    prerequisites = removeExtraSpaces(content.substring(index, tmp_idx));
+
                     // TODO: division category
 
                     /** Additions by SKE **/
@@ -99,7 +106,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
                     String code = fullCode.substring(indexOfTheDivider + 1);
 
                     //changeText(id, department, code, title, description, units);
-                    addToDatabase(id, department, code, title, description, units, false);
+                    addToDatabase(id, department, code, title, description, units, prerequisites);
                 }
                 index = next_idx;
             }
@@ -107,8 +114,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
         }
 
         private void addToDatabase(String id, String department, String code, String title,
-                                   String description, String units, boolean update) {
-
+                                   String description, String units, String prerequisites) {
             // Create a new map of values, where column names are the keys
             ContentValues values = new ContentValues();
             values.put(Course.COLUMN_ENTRY_ID, id);
@@ -117,6 +123,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
             values.put(Course.COLUMN_TITLE, title);
             values.put(Course.COLUMN_DESCRIPTION, description);
             values.put(Course.COLUMN_UNITS, units);
+            values.put(Course.COLUMN_PREREQUISITES, prerequisites);
 
             String selection = Course.COLUMN_ENTRY_ID + " LIKE ?";
             String[] selectionArgs = {id};

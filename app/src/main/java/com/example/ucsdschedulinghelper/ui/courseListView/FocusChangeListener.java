@@ -7,7 +7,11 @@ import android.view.inputmethod.InputMethodManager;
 import com.example.ucsdschedulinghelper.R;
 
 /**
- * Created by Sp0t on 10/11/15.
+ * Created by SKE on 10/11/15.
+ */
+
+/**
+ * The class is not used for now.
  */
 public class FocusChangeListener implements View.OnFocusChangeListener {
     private Context context;

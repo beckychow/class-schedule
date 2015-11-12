@@ -25,7 +25,8 @@ public class CoursesCollectionDbHelper extends SQLiteOpenHelper {
             Course.COLUMN_UNITS + TEXT_TYPE + COMMA_SEP +
             Course.COLUMN_COMPLETED + INT_TYPE + COMMA_SEP +
             Course.COLUMN_IN_PROGRESS + INT_TYPE + COMMA_SEP +
-            Course.COLUMN_SOI + INT_TYPE +
+            Course.COLUMN_SOI + INT_TYPE + COMMA_SEP +
+            Course.COLUMN_PREREQUISITES + TEXT_TYPE +
             " )";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + Course.TABLE_NAME;
 

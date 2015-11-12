@@ -21,5 +21,6 @@ public final class CoursesCollectionContract {
         public static final String COLUMN_COMPLETED = "completed";
         public static final String COLUMN_IN_PROGRESS = "in_progress";
         public static final String COLUMN_SOI = "subject_of_interest";
+        public static final String COLUMN_PREREQUISITES = "prerequisites";
     }
 }
