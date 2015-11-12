@@ -33,7 +33,7 @@ public class CourseDetailedView extends Activity {
     private boolean inProgress;
     private Button courseCompletionButton, courseInProgressButton;
     private SpannableString prerequisitesWithLinks;
-    private TextView courseDepartment, courseCode;
+    private String department, code;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,9 +62,9 @@ public class CourseDetailedView extends Activity {
 
         if (cursor != null) {
             cursor.moveToFirst();
-            String department = cursor.getString(cursor.getColumnIndexOrThrow(
+            department = cursor.getString(cursor.getColumnIndexOrThrow(
                     CoursesCollectionContract.Course.COLUMN_DEPARTMENT));
-            String code = cursor.getString(cursor.getColumnIndexOrThrow(
+            code = cursor.getString(cursor.getColumnIndexOrThrow(
                     CoursesCollectionContract.Course.COLUMN_CODE));
             String title = cursor.getString(cursor.getColumnIndexOrThrow(
                     CoursesCollectionContract.Course.COLUMN_TITLE));
@@ -89,8 +89,8 @@ public class CourseDetailedView extends Activity {
             else
                 inProgress = true;
 
-            courseDepartment = (TextView) findViewById(R.id.course_detailed_text_department);
-            courseCode = (TextView) findViewById(R.id.course_detailed_text_code);
+            TextView courseDepartment = (TextView) findViewById(R.id.course_detailed_text_department);
+            TextView courseCode = (TextView) findViewById(R.id.course_detailed_text_code);
             TextView courseTitle = (TextView) findViewById(R.id.course_detailed_text_title);
             TextView courseDescription = (TextView) findViewById(R.id.course_detailed_text_description);
             TextView courseUnits = (TextView) findViewById(R.id.course_detailed_text_units);
@@ -213,8 +213,7 @@ public class CourseDetailedView extends Activity {
 
                     String courseID = cursor.getString(cursor.getColumnIndexOrThrow(
                             CoursesCollectionContract.Course._ID));
-                    String courseTitle = courseDepartment.getText().toString() +
-                            courseCode.getText().toString();
+                    String courseTitle = department + " " + code;
 
                     prerequisitesWithLinks.setSpan(new MyClickableSpan(courseID, courseTitle),
                             linkStart, currentIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
