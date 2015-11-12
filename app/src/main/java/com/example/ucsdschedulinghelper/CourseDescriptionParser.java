@@ -3,8 +3,6 @@ package com.example.ucsdschedulinghelper;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.method.ScrollingMovementMethod;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.ucsdschedulinghelper.provider.CoursesContentProvider;
 
-import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionDbHelper;
 import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContract.Course;
 
 /**
@@ -25,20 +22,11 @@ import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContra
 
 public class CourseDescriptionParser extends MyHtmlParser {
 
-    private Context context;
-    private CoursesCollectionDbHelper mDbHelper;
-    private SQLiteDatabase db;
     private ContentResolver contentResolver;
 
-    boolean once = true;
-
-    public CourseDescriptionParser(Activity activity, Context context,
-                                   ContentResolver contentResolver, String url) {
+    public CourseDescriptionParser(Activity activity, ContentResolver contentResolver, String url) {
         super(activity, url);
-        this.context = context;
         this.contentResolver = contentResolver;
-        mDbHelper = new CoursesCollectionDbHelper(context);
-        db = mDbHelper.getWritableDatabase();
     }
 
     void parseContentToDB() {
@@ -130,13 +118,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
             values.put(Course.COLUMN_DESCRIPTION, description);
             values.put(Course.COLUMN_UNITS, units);
 
-            // Insert the new row, returning the primary key value of the new row
-            // long newRowId = db.insert(Course.TABLE_NAME, "null", values);
-        /*if (once) {
-            long newRowId = db.insert(Course.TABLE_NAME, "null", values);
-            once = false;
-        }*/
-            String selection = "entryid LIKE ?";
+            String selection = Course.COLUMN_ENTRY_ID + " LIKE ?";
             String[] selectionArgs = {id};
             contentResolver.update(CoursesContentProvider.CONTENT_URI, values,
                     selection, selectionArgs);

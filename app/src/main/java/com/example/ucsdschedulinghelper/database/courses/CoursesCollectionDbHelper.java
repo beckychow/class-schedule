@@ -13,7 +13,7 @@ import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContra
  */
 public class CoursesCollectionDbHelper extends SQLiteOpenHelper {
     public static final String TEXT_TYPE = " TEXT";
-    public static final String INT_TYPE = " INT";
+    public static final String INT_TYPE = " INTEGER";
     public static final String COMMA_SEP = ", ";
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + Course.TABLE_NAME + " (" +
             Course._ID + " INTEGER PRIMARY KEY, " +
@@ -22,7 +22,10 @@ public class CoursesCollectionDbHelper extends SQLiteOpenHelper {
             Course.COLUMN_CODE + TEXT_TYPE + COMMA_SEP +
             Course.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
             Course.COLUMN_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
-            Course.COLUMN_UNITS + TEXT_TYPE +
+            Course.COLUMN_UNITS + TEXT_TYPE + COMMA_SEP +
+            Course.COLUMN_COMPLETED + INT_TYPE + COMMA_SEP +
+            Course.COLUMN_IN_PROGRESS + INT_TYPE + COMMA_SEP +
+            Course.COLUMN_SOI + INT_TYPE +
             " )";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + Course.TABLE_NAME;
 

@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -49,10 +50,12 @@ public class CoursesContentProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         long id = 0;
         db = mDbHelper.getWritableDatabase();
+        values.put(Course.COLUMN_COMPLETED, 0);
+        values.put(Course.COLUMN_IN_PROGRESS, 0);
+        values.put(Course.COLUMN_SOI, 0);
 
         switch (sUriMatcher.match(uri)) {
             case COURSES:
-
                 id = db.insert(Course.TABLE_NAME, null, values);
                 break;
             default:
@@ -107,8 +110,12 @@ public class CoursesContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-        // TODO: update already existing items based on entryid's
-        if (rowsUpdated == 0) db.insert(Course.TABLE_NAME, null, values);
+        // if such course does not exist in the table
+        if (rowsUpdated == 0) {
+            insert(uri, values);
+            // Log.e("TESTING", "executed insertion");
+        }
+
         getContext().getContentResolver().notifyChange(uri, null);
         return rowsUpdated;
     }
@@ -136,7 +143,7 @@ public class CoursesContentProvider extends ContentProvider {
                  * present. Get the last path segment from the URI, this is the _ID value.
                  * Then, append the value to the WHERE clause for the query.
                  */
-                selection = "_id = " + uri.getLastPathSegment();
+                selection = Course._ID + " = " + uri.getLastPathSegment();
                 break;
 
             default:
@@ -147,8 +154,9 @@ public class CoursesContentProvider extends ContentProvider {
 
         Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs,
                 null, null, sortOrder);
-
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
+
         return cursor;
     }
 

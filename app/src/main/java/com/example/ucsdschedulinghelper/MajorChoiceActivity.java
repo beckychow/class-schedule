@@ -51,7 +51,7 @@ public class MajorChoiceActivity extends AppCompatActivity {
                 "http://www.ucsd.edu/catalog/courses/CSE.html");
         final TextView textView = (TextView) this.findViewById(R.id.message);
         textView.setText(fetchDataFromHttp.getResults());*/
-        CourseDescriptionParser cdp = new CourseDescriptionParser(this, this, getContentResolver(),
+        CourseDescriptionParser cdp = new CourseDescriptionParser(this, getContentResolver(),
                                             "http://www.ucsd.edu/catalog/courses/CSE.html");
         cdp.parseContentToDB();
     }
