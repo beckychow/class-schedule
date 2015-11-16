@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import java.util.concurrent.ExecutionException;
 
 import com.example.ucsdschedulinghelper.ui.courseListView.ListViewLoader;
+import com.example.ucsdschedulinghelper.ui.fourYearPlan.fypView;
 
 public class MajorChoiceActivity extends AppCompatActivity {
 
@@ -52,9 +53,11 @@ public class MajorChoiceActivity extends AppCompatActivity {
         final TextView textView = (TextView) this.findViewById(R.id.message);*/
         CourseDescriptionParser cdp = new CourseDescriptionParser(this, getContentResolver(),
                                             "http://www.ucsd.edu/catalog/courses/CSE.html");
-        /*PlanParser cdp = new PlanParser(this,
-                "http://plans.ucsd.edu/controller.php?action=LoadPlans&college=RE&year=2015&major=CS25");*/
         cdp.parseContentToDB();
+
+        PlanParser pdp = new PlanParser(this,
+                "http://plans.ucsd.edu/controller.php?action=LoadPlans&college=RE&year=2015&major=CS25");
+        pdp.parseContentToDB();
     }
 
     @Override
@@ -82,6 +85,11 @@ public class MajorChoiceActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 01;
     public void showCourseList(View view) {
         Intent intent = new Intent(this, ListViewLoader.class);
+        startActivity(intent);
+    }
+
+    public void showFourYearPlan(View view) {
+        Intent intent = new Intent(this, fypView.class);
         startActivity(intent);
     }
 

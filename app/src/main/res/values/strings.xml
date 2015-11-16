@@ -5,6 +5,7 @@
     <string name="choose_quarter">Choose expected quarter of graduation</string>
     <string name="choose_year">Choose expected year of graduation</string>
     <string name="submit">Submit</string>
+    <string name="fyp">Four Year Plan</string>
     <string name="computer_science">Computer Science (B.S.)</string>
     <string name="cs_bio">Computer Science with Bioinformatics</string>
     <string name="computer_engineering">Computer Engineering</string>

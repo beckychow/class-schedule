@@ -32,6 +32,11 @@
             android:label="CourseDetailedView">
         </activity>
 
+        <activity
+            android:name=".ui.fourYearPlan.fypView"
+            android:label="FourYearPlanView">
+        </activity>
+
         <provider
             android:name=".provider.CoursesContentProvider"
             android:authorities="com.example.ucsdschedulinghelper.provider"

@@ -55,8 +55,7 @@ public class ListViewLoader extends ListActivity
     // This is the select criteria
     private static String SELECTION = "";
     private String[] selectionArgs = null;
-
-    @Override
+    private static String sortOrder = "";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -106,7 +105,7 @@ public class ListViewLoader extends ListActivity
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
         return new CursorLoader(this, CoursesContentProvider.CONTENT_URI,
-                PROJECTION, SELECTION, selectionArgs, null);
+                PROJECTION, SELECTION, selectionArgs, sortOrder);
     }
 
     // Called when a previously created loader has finished loading
@@ -142,7 +141,7 @@ public class ListViewLoader extends ListActivity
     }
 
     private void setupSearchView() {
-        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setIconifiedByDefault(true);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
         mSearchView.setQueryHint("Search here");

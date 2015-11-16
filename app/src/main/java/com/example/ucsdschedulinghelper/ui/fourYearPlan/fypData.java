@@ -47,7 +47,8 @@ public class fypData {
         winter4_classes.add("Test");
 
         List<String> spring4_classes = new ArrayList<String>();
-        spring4_classes.add("Test");
+        spring4_classes.add("Test_1");
+        spring4_classes.add("Test_2");
 
         //Put everything in the hashmap, shouldn't need to mess with this later
         classDetails.put("Freshman Fall", fall_classes);
