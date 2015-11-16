@@ -27,7 +27,7 @@ abstract public class MyHtmlParser{
         }
     }
 
-    abstract protected class parseTask extends AsyncTask<FetchDataFromHttp, Void, Void>
+    abstract protected class ParseTask extends AsyncTask<FetchDataFromHttp, Void, Void>
     {
         @Override
         abstract public Void doInBackground(FetchDataFromHttp... params);

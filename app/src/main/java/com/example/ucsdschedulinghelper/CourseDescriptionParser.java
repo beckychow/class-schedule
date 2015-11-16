@@ -31,10 +31,10 @@ public class CourseDescriptionParser extends MyHtmlParser {
     }
 
     void parseContentToDB() {
-        new parseContentToDBTask().execute(fetchDataFromHttp);
+        new ParseContentToDBTask().execute(fetchDataFromHttp);
     }
 
-    private class parseContentToDBTask extends parseTask {
+    private class ParseContentToDBTask extends ParseTask {
         @Override
         public void onPreExecute() {
 

@@ -98,7 +98,6 @@
         android:scrollbars="vertical"
         android:typeface="monospace"
         android:layout_gravity="center"
-        android:visibility="invisible"
         />
 
 </LinearLayout>
