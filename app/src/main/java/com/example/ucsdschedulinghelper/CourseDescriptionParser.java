@@ -32,9 +32,16 @@ public class CourseDescriptionParser extends MyHtmlParser {
 
     void parseContentToDB() {
         new ParseContentToDBTask().execute(fetchDataFromHttp);
+
+        // test
+        /*final TextView textView = (TextView) myActivity.findViewById(R.id.message);
+        textView.setMovementMethod(new ScrollingMovementMethod());
+        textView.setText(newString);*/
+
     }
 
     private class ParseContentToDBTask extends ParseTask {
+
         @Override
         public void onPreExecute() {
 
@@ -42,15 +49,16 @@ public class CourseDescriptionParser extends MyHtmlParser {
 
         @Override
         public Void doInBackground(FetchDataFromHttp... params) {
+
             // get text format of the html file
             String content = params[0].getResults();
 
             // Tags for parsing
             final String DIVISION_TAG = "<h2 class=\"course-subhead-1\">";
-            final String ID_TAG = "<a id=\"";
+            final String ID_TAG = "id=\"";
             final String NAME_TAG = "<p class=\"course-name\">";
             final String DESCRIPTION_TAG = "<p class=\"course-descriptions\">";
-            final String PREREQUISITES_TAG = "<strong class=\"italic\">Prerequisites:</strong>";
+            final String PREREQUISITES_TAG = "</strong>";
 
             // Lower division, Upper division, Graduate
             int index = content.indexOf(DIVISION_TAG);
@@ -87,13 +95,12 @@ public class CourseDescriptionParser extends MyHtmlParser {
 
                     // get course description
                     index = content.indexOf(DESCRIPTION_TAG, index) + DESCRIPTION_TAG.length();
-                    //tmp_idx = content.indexOf("<strong", index) - 1;
-                    tmp_idx = content.indexOf(PREREQUISITES_TAG, index) - 1;
+                    tmp_idx = content.indexOf("<strong", index) - 1;
                     description = content.substring(index, tmp_idx);
                     description = removeInsideTags(description);
                     description = removeExtraSpaces(description);
 
-                    // TODO: get prerequisites
+                    // get prerequisites
                     index = content.indexOf(PREREQUISITES_TAG, index) + PREREQUISITES_TAG.length();
                     tmp_idx = content.indexOf("</p>", index);
                     prerequisites = removeExtraSpaces(content.substring(index, tmp_idx));
@@ -113,6 +120,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
             return null;
         }
 
+
         private void addToDatabase(String id, String department, String code, String title,
                                    String description, String units, String prerequisites) {
             // Create a new map of values, where column names are the keys
@@ -130,22 +138,20 @@ public class CourseDescriptionParser extends MyHtmlParser {
             contentResolver.update(CoursesContentProvider.CONTENT_URI, values,
                     selection, selectionArgs);
         }
-    }
 
+        private void changeText(String id, String department, String code, String title,
+                                String description, String units) {
+            String newString = //newString + "\n" +
+                    " --  ID: " + id + "\n" +
+                    " --DEPT: " + department + "\n" +
+                    " --CODE: " + code + "\n" +
+                    " --NAME: " + title + "\n" +
+                    " --DESC: " + description + "\n" +
+                    " --UNIT: " + units + "\n" +
+                    "  <<-->>\n";
+            Log.d("CourseDescriptionParser", newString);
+        }
 
-    private void changeText(String id, String department, String code, String title,
-                            String description, String units) {
-        final TextView textView = (TextView) myActivity.findViewById(R.id.message);
-        textView.setMovementMethod(new ScrollingMovementMethod());
-        String newString = textView.getText() + "\n" +
-                " --  ID: " + id + "\n" +
-                " --DEPT: " + department + "\n" +
-                " --CODE: " + code + "\n" +
-                " --NAME: " + title + "\n" +
-                " --DESC: " + description + "\n" +
-                " --UNIT: " + units + "\n" +
-                "  <<-->>\n";
-        textView.setText(newString);
     }
 
 

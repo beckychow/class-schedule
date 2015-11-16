@@ -49,12 +49,11 @@ public class MajorChoiceActivity extends AppCompatActivity {
     private void changeText() throws ExecutionException, InterruptedException{
         /*FetchDataFromHttp fetchDataFromHttp = new FetchDataFromHttp(getApplicationContext(),
                 "http://www.ucsd.edu/catalog/courses/CSE.html");
-        final TextView textView = (TextView) this.findViewById(R.id.message);
-        textView.setText(fetchDataFromHttp.getResults());*/
-        /*CourseDescriptionParser cdp = new CourseDescriptionParser(this, getContentResolver(),
-                                            "http://www.ucsd.edu/catalog/courses/CSE.html");*/
-        PlanParser cdp = new PlanParser(this,
-                "http://plans.ucsd.edu/controller.php?action=LoadPlans&college=RE&year=2015&major=CS25");
+        final TextView textView = (TextView) this.findViewById(R.id.message);*/
+        CourseDescriptionParser cdp = new CourseDescriptionParser(this, getContentResolver(),
+                                            "http://www.ucsd.edu/catalog/courses/CSE.html");
+        /*PlanParser cdp = new PlanParser(this,
+                "http://plans.ucsd.edu/controller.php?action=LoadPlans&college=RE&year=2015&major=CS25");*/
         cdp.parseContentToDB();
     }
 
