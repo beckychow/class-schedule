@@ -14,8 +14,6 @@ import org.json.JSONObject;
  * Created by Huayin Zhou on 11/15/15.
  */
 public class PlanParser extends MyHtmlParser {
-    private static final String DEBUG_TAG = "PlanParser";
-    JSONObject reader;
 
     public PlanParser(Activity activity, String url) {
         super(activity, url);
