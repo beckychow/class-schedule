@@ -3,7 +3,6 @@ package com.example.ucsdschedulinghelper.ui.courseListView;
 import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -11,13 +10,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -25,11 +21,10 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.example.ucsdschedulinghelper.R;
-import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContract;
-import com.example.ucsdschedulinghelper.provider.CoursesContentProvider;
-import com.example.ucsdschedulinghelper.ui.courseListView.FocusChangeListener;
+import com.example.ucsdschedulinghelper.database.CoursesCollectionContract;
+import com.example.ucsdschedulinghelper.provider.DbContentProvider;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
 
 /**
  * Created by SKE on 5/11/15.
@@ -104,7 +99,7 @@ public class ListViewLoader extends ListActivity
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
-        return new CursorLoader(this, CoursesContentProvider.CONTENT_URI,
+        return new CursorLoader(this, DbContentProvider.CONTENT_COURSES_URI,
                 PROJECTION, SELECTION, selectionArgs, sortOrder);
     }
 
@@ -129,11 +124,11 @@ public class ListViewLoader extends ListActivity
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(this, CourseDetailedView.class);
         TextView courseIDView = (TextView) v.findViewById(R.id.list_item_text_id);
-        Uri courseUri = Uri.withAppendedPath(CoursesContentProvider.CONTENT_URI, courseIDView.getText().toString());
+        Uri courseUri = Uri.withAppendedPath(DbContentProvider.CONTENT_COURSES_URI, courseIDView.getText().toString());
 
         //Log.e(getClass().getSimpleName() ,"Uri id = " + courseIDView.getText().toString());
 
-        intent.putExtra(CoursesContentProvider.CONTENT_ITEM_TYPE, courseUri);
+        intent.putExtra(DbContentProvider.CONTENT_COURSES_ITEM_TYPE, courseUri);
 
         //Log.e(getClass().getSimpleName(), "Uri = " + courseUri.toString());
 
@@ -157,12 +152,57 @@ public class ListViewLoader extends ListActivity
             selectionArgs = null;
         }
         else {
-            String mFilter = '%' + filter + '%';
-            SELECTION = "(" + CoursesCollectionContract.Course.COLUMN_DEPARTMENT + " LIKE ?) OR " +
-                    "(" + CoursesCollectionContract.Course.COLUMN_CODE + " LIKE ?) OR " +
-                    "(" + CoursesCollectionContract.Course.COLUMN_TITLE + " LIKE ?)";
-            selectionArgs = new String[] {mFilter, mFilter, mFilter};
+            String openPar = "(";
+            String closePar = ")";
+            String matchKey = "%";
+            String likeKey = " LIKE?";
+            String orKey = " OR ";
+            String andKey = " AND ";
+
+            String[] filterWords = filter.split("\\s");
+
+            ArrayList<String> selArgs = new ArrayList<>();
+            boolean isCourseCodeSearch = false;
+
+            SELECTION = "";
+            for (int index = 0; index < filterWords.length; index++) {
+                if (Character.isDigit(filterWords[index].charAt(0))) {
+                    if (index > 0) {
+                        int lastOrIndex = SELECTION.lastIndexOf(orKey);
+                        int lastAndIndex = SELECTION.lastIndexOf(andKey);
+                        int lastKeyIndex = Math.max(lastOrIndex, lastAndIndex);
+                        SELECTION = SELECTION.substring(0, lastKeyIndex);
+                        SELECTION += andKey;
+                    }
+
+                    SELECTION += openPar + CoursesCollectionContract.Course.COLUMN_CODE +
+                            likeKey + closePar;
+                    isCourseCodeSearch = true;
+                    selArgs.add(matchKey + filterWords[index] + matchKey);
+                }
+                else {
+                    SELECTION += openPar + openPar + CoursesCollectionContract.Course.COLUMN_DEPARTMENT +
+                            likeKey + closePar + orKey +
+                            openPar + CoursesCollectionContract.Course.COLUMN_DESCRIPTION +
+                            likeKey + closePar + closePar;
+
+                    selArgs.add(matchKey + filterWords[index] + matchKey);
+                    selArgs.add(matchKey + filterWords[index] + matchKey);
+                }
+
+                if (index < filterWords.length - 1) {
+                    if (isCourseCodeSearch)
+                        SELECTION += andKey;
+                    else
+                        SELECTION += orKey;
+                    isCourseCodeSearch = false;
+                }
+            }
+
+            selectionArgs = new String[ selArgs.size() ];
+            selArgs.toArray(selectionArgs);
         }
+
         getLoaderManager().restartLoader(0, null, this);
         return true;
     }

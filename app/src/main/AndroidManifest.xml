@@ -38,7 +38,7 @@
         </activity>
 
         <provider
-            android:name=".provider.CoursesContentProvider"
+            android:name=".provider.DbContentProvider"
             android:authorities="com.example.ucsdschedulinghelper.provider"
             android:exported="true"
             android:grantUriPermissions="true"

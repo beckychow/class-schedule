@@ -3,15 +3,11 @@ package com.example.ucsdschedulinghelper;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.widget.TextView;
 
-import com.example.ucsdschedulinghelper.provider.CoursesContentProvider;
+import com.example.ucsdschedulinghelper.provider.DbContentProvider;
 
-import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContract.Course;
+import com.example.ucsdschedulinghelper.database.CoursesCollectionContract.Course;
 
 /**
  * Created by Huayin Zhou on 10/24/15.
@@ -135,7 +131,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
 
             String selection = Course.COLUMN_ENTRY_ID + " LIKE ?";
             String[] selectionArgs = {id};
-            contentResolver.update(CoursesContentProvider.CONTENT_URI, values,
+            contentResolver.update(DbContentProvider.CONTENT_COURSES_URI, values,
                     selection, selectionArgs);
         }
 

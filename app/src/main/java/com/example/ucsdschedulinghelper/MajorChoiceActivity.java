@@ -55,7 +55,7 @@ public class MajorChoiceActivity extends AppCompatActivity {
                                             "http://www.ucsd.edu/catalog/courses/CSE.html");
         cdp.parseContentToDB();
 
-        PlanParser pdp = new PlanParser(this,
+        PlanParser pdp = new PlanParser(this, getContentResolver(),
                 "http://plans.ucsd.edu/controller.php?action=LoadPlans&college=RE&year=2015&major=CS25");
         pdp.parseContentToDB();
     }

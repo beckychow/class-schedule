@@ -1,4 +1,4 @@
-package com.example.ucsdschedulinghelper.database.courses;
+package com.example.ucsdschedulinghelper.database;
 
 import android.provider.BaseColumns;
 

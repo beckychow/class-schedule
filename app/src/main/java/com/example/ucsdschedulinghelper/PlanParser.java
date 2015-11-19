@@ -1,10 +1,15 @@
 package com.example.ucsdschedulinghelper;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.widget.TextView;
+
+import com.example.ucsdschedulinghelper.database.FourYearPlanContract.PlanEntry;
+import com.example.ucsdschedulinghelper.database.CoursesCollectionContract.Course;
+import com.example.ucsdschedulinghelper.provider.DbContentProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,13 +20,18 @@ import org.json.JSONObject;
  */
 public class PlanParser extends MyHtmlParser {
 
-    public PlanParser(Activity activity, String url) {
+
+    private ContentResolver contentResolver;
+
+    public PlanParser(Activity activity, ContentResolver contentResolver, String url) {
         super(activity, url);
+        this.contentResolver = contentResolver;
     }
 
     void parseContentToDB() { new ParseContentToDBTask().execute(fetchDataFromHttp); }
 
     private class ParseContentToDBTask extends ParseTask {
+
         @Override
         public void onPreExecute() {
 
@@ -44,7 +54,8 @@ public class PlanParser extends MyHtmlParser {
                             String year_taken = course.getString("year_taken");
                             String quarter_taken = course.getString("quarter_taken");
                             // test
-                            changeText(course_name, year_taken, quarter_taken);
+                            //changeText(course_name, year_taken, quarter_taken);
+                            addToDatabase(course_name, year_taken, quarter_taken);
                         }
                     }
                 }
@@ -66,5 +77,44 @@ public class PlanParser extends MyHtmlParser {
                 " -- quarter_taken: " + quarter_taken + "\n" +
                 "  <<-->>\n";
         textView.setText(newString);
+    }
+
+    /** Additions by SKE **/
+    private void addToDatabase(String courseName, String year, String quarter) {
+        ContentValues values = new ContentValues();
+
+        courseName = courseName.trim();
+        values.put(PlanEntry.COLUMN_COURSE_NAME, courseName);
+        values.put(PlanEntry.COLUMN_YEAR, year);
+        values.put(PlanEntry.COLUMN_QUARTER, quarter);
+        values.put(PlanEntry.COLUMN_COURSE_ID, findCorrespondingCourseId(courseName));
+
+        String selection = PlanEntry.COLUMN_COURSE_NAME + " LIKE ?";
+        String[] selectionArgs = {courseName};
+
+        contentResolver.update(DbContentProvider.CONTENT_PLAN_URI, values,
+                selection, selectionArgs);
+    }
+
+    private int findCorrespondingCourseId(String courseName) {
+        int nameLengthLimit = 9; // 4 for dept + 5 for code
+        int courseId = 0;
+
+        courseName = courseName.replaceAll("\\s", "");
+        courseName = courseName.replaceAll("\\*", "");
+
+        if (courseName.length() <= nameLengthLimit) {
+            String[] projection = {Course._ID, Course.COLUMN_ENTRY_ID};
+            String selection = Course.COLUMN_ENTRY_ID + " LIKE ?";
+            String[] selectionArgs = {courseName};
+            Cursor cursor = contentResolver.query(DbContentProvider.CONTENT_COURSES_URI,
+                    projection, selection, selectionArgs, null);
+
+            if (cursor != null && cursor.moveToFirst() && cursor.isLast()) {
+                courseId = cursor.getInt(cursor.getColumnIndexOrThrow(Course._ID));
+            }
+            cursor.close();
+        }
+        return courseId;
     }
 }

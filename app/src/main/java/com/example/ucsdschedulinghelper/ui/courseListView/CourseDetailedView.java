@@ -13,15 +13,14 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ucsdschedulinghelper.R;
-import com.example.ucsdschedulinghelper.database.courses.CoursesCollectionContract;
-import com.example.ucsdschedulinghelper.provider.CoursesContentProvider;
+import com.example.ucsdschedulinghelper.database.CoursesCollectionContract;
+import com.example.ucsdschedulinghelper.provider.DbContentProvider;
 
 /**
  * Created by SKE on 8/11/15.
@@ -42,7 +41,7 @@ public class CourseDetailedView extends Activity {
 
         courseCompletionButton = (Button) findViewById(R.id.course_detailed_button_completion);
         courseInProgressButton = (Button) findViewById(R.id.course_detailed_button_inprogress);
-        courseUri = getIntent().getExtras().getParcelable(CoursesContentProvider.CONTENT_ITEM_TYPE);
+        courseUri = getIntent().getExtras().getParcelable(DbContentProvider.CONTENT_COURSES_ITEM_TYPE);
         fillData(courseUri);
         updateButtons();
     }
@@ -200,22 +199,23 @@ public class CourseDetailedView extends Activity {
                 String selection =
                         CoursesCollectionContract.Course.COLUMN_DEPARTMENT + " LIKE ? AND " +
                         CoursesCollectionContract.Course.COLUMN_CODE + " LIKE ?" ;
+                String space = " ";
 
-                String[] selectionArgs = new String[] {tag + possibleDepartment + tag, possibleCode};
+                String[] selectionArgs = {tag + possibleDepartment + tag, possibleCode};
 
-                Cursor cursor = getContentResolver().query(CoursesContentProvider.CONTENT_URI,
+                Cursor cursor = getContentResolver().query(DbContentProvider.CONTENT_COURSES_URI,
                         projection, selection, selectionArgs, null);
 
                 // if only 1 existing match was found
-                if (cursor != null && cursor.moveToFirst()) {
+                if (cursor != null && cursor.moveToFirst() && cursor.isLast()) {
                     /* Log.e(" -- DB QUERY", cursor.getString(cursor.getColumnIndexOrThrow(
                             CoursesCollectionContract.Course.COLUMN_ENTRY_ID))); */
 
-                    String courseID = cursor.getString(cursor.getColumnIndexOrThrow(
+                    String courseId = cursor.getString(cursor.getColumnIndexOrThrow(
                             CoursesCollectionContract.Course._ID));
-                    String courseTitle = department + " " + code;
+                    String courseTitle = department + space + code;
 
-                    prerequisitesWithLinks.setSpan(new MyClickableSpan(courseID, courseTitle),
+                    prerequisitesWithLinks.setSpan(new MyClickableSpan(courseId, courseTitle),
                             linkStart, currentIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 cursor.close();
@@ -268,8 +268,8 @@ public class CourseDetailedView extends Activity {
     }
 
     /*
-     * The template for this class was taken from stackoverflow,
-     * but was changed
+     * The template from stackoverflow was taken as basis,
+     * but was changed to suit our purposes.
      */
     class MyClickableSpan extends ClickableSpan { //clickable span
         private String id;
@@ -283,9 +283,10 @@ public class CourseDetailedView extends Activity {
         @Override
         public void onClick(View textView) {
             Intent intent = new Intent(getContext(), CourseDetailedView.class);
-            Uri courseUri = Uri.withAppendedPath(CoursesContentProvider.CONTENT_URI, id);
-            intent.putExtra(CoursesContentProvider.CONTENT_ITEM_TYPE, courseUri);
+            Uri courseUri = Uri.withAppendedPath(DbContentProvider.CONTENT_COURSES_URI, id);
+            intent.putExtra(DbContentProvider.CONTENT_COURSES_ITEM_TYPE, courseUri);
             startActivity(intent);
+            finish();
 
             Toast.makeText(CourseDetailedView.this, "From " + str,
             Toast.LENGTH_SHORT).show();
