@@ -85,8 +85,10 @@ public class PlanParser extends MyHtmlParser {
 
         courseName = courseName.trim();
         values.put(PlanEntry.COLUMN_COURSE_NAME, courseName);
-        values.put(PlanEntry.COLUMN_YEAR, year);
-        values.put(PlanEntry.COLUMN_QUARTER, quarter);
+        values.put(PlanEntry.COLUMN_YEAR_DEFAULT, year);
+        values.put(PlanEntry.COLUMN_YEAR_USER, year);
+        values.put(PlanEntry.COLUMN_QUARTER_DEFAULT, quarter);
+        values.put(PlanEntry.COLUMN_QUARTER_USER, quarter);
         values.put(PlanEntry.COLUMN_COURSE_ID, findCorrespondingCourseId(courseName));
 
         String selection = PlanEntry.COLUMN_COURSE_NAME + " LIKE ?";
