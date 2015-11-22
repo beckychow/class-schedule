@@ -1,4 +1,4 @@
-package com.example.ucsdschedulinghelper;
+package com.example.ucsdschedulinghelper.parser;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -26,7 +26,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
         this.contentResolver = contentResolver;
     }
 
-    void parseContentToDB() {
+    public void parseContent() {
         new ParseContentToDBTask().execute(fetchDataFromHttp);
 
         // test

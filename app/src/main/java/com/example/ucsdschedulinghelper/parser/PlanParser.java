@@ -1,4 +1,4 @@
-package com.example.ucsdschedulinghelper;
+package com.example.ucsdschedulinghelper.parser;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
+import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.database.FourYearPlanContract.PlanEntry;
 import com.example.ucsdschedulinghelper.database.CoursesCollectionContract.Course;
 import com.example.ucsdschedulinghelper.provider.DbContentProvider;
@@ -28,7 +29,7 @@ public class PlanParser extends MyHtmlParser {
         this.contentResolver = contentResolver;
     }
 
-    void parseContentToDB() { new ParseContentToDBTask().execute(fetchDataFromHttp); }
+    public void parseContent() { new ParseContentToDBTask().execute(fetchDataFromHttp); }
 
     private class ParseContentToDBTask extends ParseTask {
 

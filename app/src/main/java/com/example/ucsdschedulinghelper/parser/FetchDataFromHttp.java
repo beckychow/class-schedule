@@ -1,4 +1,4 @@
-package com.example.ucsdschedulinghelper;
+package com.example.ucsdschedulinghelper.parser;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -48,6 +48,7 @@ public class FetchDataFromHttp {
             try {
                 return downloadUrl(urls[0]);
             } catch (IOException e) {
+                e.printStackTrace();
                 return "Unable to retrieve web page. URL may be invalid.";
             }
         }

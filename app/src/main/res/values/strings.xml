@@ -2,23 +2,26 @@
     <string name="app_name">UCSD Scheduling Helper</string>
     <string name="action_settings">Settings</string>
     <string name="choose_major">Choose a major</string>
-    <string name="choose_quarter">Choose expected quarter of graduation</string>
-    <string name="choose_year">Choose expected year of graduation</string>
+    <string name="choose_quarter">Choose quarter of entering UCSD</string>
+    <string name="choose_year">Choose year of entering UCSD</string>
     <string name="submit">Submit</string>
     <string name="fyp">Four Year Plan</string>
     <string name="computer_science">Computer Science (B.S.)</string>
     <string name="cs_bio">Computer Science with Bioinformatics</string>
     <string name="computer_engineering">Computer Engineering</string>
     <string name="computer_science_ba">Computer Science (B.A.)</string>
+    <string name="cape">CAPE</string>
     <string-array name="grad_quarter">
         <item>Fall</item>
         <item>Winter</item>
         <item>Spring</item>
     </string-array>
     <string-array name="grad_year">
-        <item>2016</item>
-        <item>2017</item>
-        <item>2018</item>
-        <item>2019</item>
+        <item>2010</item>
+        <item>2011</item>
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
+        <item>2015</item>
     </string-array>
 </resources>

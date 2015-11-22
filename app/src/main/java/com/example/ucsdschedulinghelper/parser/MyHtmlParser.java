@@ -1,4 +1,4 @@
-package com.example.ucsdschedulinghelper;
+package com.example.ucsdschedulinghelper.parser;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -14,6 +14,8 @@ abstract public class MyHtmlParser{
     String urlToParse;
     Activity myActivity;
     FetchDataFromHttp fetchDataFromHttp;
+
+    public MyHtmlParser() {}
 
     public MyHtmlParser(Activity activity, String url) {
         urlToParse = url;
@@ -69,5 +71,5 @@ abstract public class MyHtmlParser{
         }
     }
 
-    abstract void parseContentToDB();
+    abstract public void parseContent();
 }

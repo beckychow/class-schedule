@@ -2,20 +2,19 @@ package com.example.ucsdschedulinghelper;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import java.util.concurrent.ExecutionException;
 
+import com.example.ucsdschedulinghelper.parser.CourseDescriptionParser;
+import com.example.ucsdschedulinghelper.parser.PlanParser;
+import com.example.ucsdschedulinghelper.ui.cape.CapeMainActivity;
 import com.example.ucsdschedulinghelper.ui.courseListView.ListViewLoader;
 import com.example.ucsdschedulinghelper.ui.fourYearPlan.fypView;
 
@@ -47,17 +46,18 @@ public class MajorChoiceActivity extends AppCompatActivity {
         }
     }
 
+    // test parser
     private void changeText() throws ExecutionException, InterruptedException{
         /*FetchDataFromHttp fetchDataFromHttp = new FetchDataFromHttp(getApplicationContext(),
                 "http://www.ucsd.edu/catalog/courses/CSE.html");
         final TextView textView = (TextView) this.findViewById(R.id.message);*/
         CourseDescriptionParser cdp = new CourseDescriptionParser(this, getContentResolver(),
                                             "http://www.ucsd.edu/catalog/courses/CSE.html");
-        cdp.parseContentToDB();
+        cdp.parseContent();
 
         PlanParser pdp = new PlanParser(this, getContentResolver(),
                 "http://plans.ucsd.edu/controller.php?action=LoadPlans&college=RE&year=2015&major=CS25");
-        pdp.parseContentToDB();
+        pdp.parseContent();
     }
 
     @Override

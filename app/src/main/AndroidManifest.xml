@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ucsdschedulinghelper" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.ucsdschedulinghelper.MajorChoiceActivity"
+            android:name=".MajorChoiceActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -21,30 +21,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.example.ucsdschedulinghelper.ui.courseListView.ListViewLoader"
-            android:label="ListViewLoader">
+            android:name=".ui.courseListView.ListViewLoader"
+            android:label="ListViewLoader" >
         </activity>
-
         <activity
-            android:name="com.example.ucsdschedulinghelper.ui.courseListView.CourseDetailedView"
-            android:label="CourseDetailedView">
+            android:name=".ui.courseListView.CourseDetailedView"
+            android:label="CourseDetailedView" >
         </activity>
-
         <activity
             android:name=".ui.fourYearPlan.fypView"
-            android:label="FourYearPlanView">
+            android:label="FourYearPlanView" >
         </activity>
 
         <provider
             android:name=".provider.DbContentProvider"
             android:authorities="com.example.ucsdschedulinghelper.provider"
+            android:enabled="true"
             android:exported="true"
-            android:grantUriPermissions="true"
-            android:enabled="true">
+            android:grantUriPermissions="true" >
         </provider>
 
+        <activity android:name=".ui.cape.CapeMainActivity"
+            android:label="Cape" >
+        </activity>
     </application>
 
 </manifest>

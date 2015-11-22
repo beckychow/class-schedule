@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.database.CoursesCollectionContract;
 import com.example.ucsdschedulinghelper.provider.DbContentProvider;
+import com.example.ucsdschedulinghelper.ui.cape.CapeMainActivity;
 
 /**
  * Created by SKE on 8/11/15.
@@ -296,5 +297,14 @@ public class CourseDetailedView extends Activity {
             ds.setColor(Color.parseColor("#0099FF")); // set text color
             ds.setUnderlineText(false); // remove the underline
         }
+    }
+
+    //test cape
+    /** added by Huayin Zhou on 27/11/15 */
+    public void showCape(View view) {
+        Intent intent = new Intent(this, CapeMainActivity.class);
+        intent.putExtra("department", "CSE");
+        intent.putExtra("code", "110");
+        startActivity(intent);
     }
 }
