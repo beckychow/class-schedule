@@ -303,8 +303,8 @@ public class CourseDetailedView extends Activity {
     /** added by Huayin Zhou on 27/11/15 */
     public void showCape(View view) {
         Intent intent = new Intent(this, CapeMainActivity.class);
-        intent.putExtra("department", department);
-        intent.putExtra("code", code);
+        intent.putExtra(CoursesCollectionContract.Course.COLUMN_DEPARTMENT, department);
+        intent.putExtra(CoursesCollectionContract.Course.COLUMN_CODE, code);
         startActivity(intent);
     }
 }

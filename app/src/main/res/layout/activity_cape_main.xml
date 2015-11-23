@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
     android:id="@+id/activity_cape_main"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.ucsdschedulinghelper.ui.cape.CapeMainActivity">
     <ScrollView
         android:id="@+id/cape_scroll"
@@ -16,12 +13,18 @@
             android:id="@+id/cape_scroll_relative"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-            <TableLayout
-                android:id="@+id/cape_table"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                >
-            </TableLayout>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+                <TableLayout
+                    android:padding="10dp"
+                    android:id="@+id/cape_table"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:showDividers="middle"
+                    >
+                </TableLayout>
+            </HorizontalScrollView>
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>

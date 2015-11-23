@@ -10,6 +10,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.ucsdschedulinghelper.R;
+import com.example.ucsdschedulinghelper.database.CoursesCollectionContract;
 import com.example.ucsdschedulinghelper.parser.CapeParser;
 import com.example.ucsdschedulinghelper.parser.OnDataSendToActivity;
 
@@ -30,8 +31,8 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cape_main);
         Intent intent = getIntent();
-        department = intent.getStringExtra("department");
-        code = intent.getStringExtra("code");
+        department = intent.getStringExtra(CoursesCollectionContract.Course.COLUMN_DEPARTMENT);
+        code = intent.getStringExtra(CoursesCollectionContract.Course.COLUMN_CODE);
         new CapeParser(this, CAPE_MAIN_PAGE + department + "+" + code);
     }
 
@@ -64,30 +65,34 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
             {
                 TableRow tableRow = new TableRow(this);
                 tableRow.setLayoutParams(rowParams);
-                for (int col = 0; col < tableContent.get(0).size(); ++col)
+                for (int col = 0; col < tableContent.get(0).size(); ++col) {
                     if (!tableContent.get(0).get(col).equals(HEADER_LINK)) {
                         TextView textView = new TextView(this);
                         textView.setLayoutParams(itemParams);
                         textView.setBackgroundColor(COLOR_HEADER);
                         textView.setText(tableContent.get(0).get(col));
+                        textView.setPadding(30, 10, 0, 0);
                         tableRow.addView(textView);
                         //Log.d(DEBUG_TAG, textView.getText().toString());
                     } else headerLinkCol = col;
+                }
                 tableLayout.addView(tableRow);
             }
             // entries
             for (int row = 1; row < tableContent.size(); ++row) {
                 TableRow tableRow = new TableRow(this);
                 tableRow.setLayoutParams(rowParams);
-                for (int col = 0; col < tableContent.get(row).size(); ++col)
+                for (int col = 0; col < tableContent.get(row).size(); ++col) {
                     if (col != headerLinkCol) {
                         TextView textView = new TextView(this);
                         textView.setLayoutParams(itemParams);
                         textView.setBackgroundColor(COLOR_ENTRY);
                         textView.setText(tableContent.get(row).get(col));
+                        textView.setPadding(30, 10, 0, 0);
                         tableRow.addView(textView);
                         //Log.d(DEBUG_TAG, textView.getText().toString());
                     }
+                }
                 tableLayout.addView(tableRow);
             }
         tableLayout.requestLayout();
