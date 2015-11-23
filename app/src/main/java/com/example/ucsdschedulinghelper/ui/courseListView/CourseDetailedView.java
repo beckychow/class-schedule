@@ -299,12 +299,12 @@ public class CourseDetailedView extends Activity {
         }
     }
 
-    //test cape
+    // goto cape activity for cape button
     /** added by Huayin Zhou on 27/11/15 */
     public void showCape(View view) {
         Intent intent = new Intent(this, CapeMainActivity.class);
-        intent.putExtra("department", "CSE");
-        intent.putExtra("code", "110");
+        intent.putExtra("department", department);
+        intent.putExtra("code", code);
         startActivity(intent);
     }
 }

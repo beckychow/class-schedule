@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -29,11 +28,11 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_cape_main);
+        setContentView(R.layout.activity_cape_main);
         Intent intent = getIntent();
         department = intent.getStringExtra("department");
         code = intent.getStringExtra("code");
-        CapeParser capeParser = new CapeParser(this, CAPE_MAIN_PAGE + department + "+" + code);
+        new CapeParser(this, CAPE_MAIN_PAGE + department + "+" + code);
     }
 
     public void sendData(List table) {
@@ -42,35 +41,25 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
     }
 
     private void addTableView() {
-        // create a table layout
-        TableLayout tableView = createTable();
-
-        // add table layout to the existing layout
-        //LinearLayout layout = (LinearLayout) findViewById(R.id.activity_cape_main);
-        //layout.addView(tableView);
-        setContentView(tableView);
+        setTable();
     }
 
-    private TableLayout createTable() {
+    private void setTable() {
         Log.d(DEBUG_TAG, department + "+" + code);
 
         // set layout parameters
-        TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(
-                TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT, 1f);
         TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
                 TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT, 1f);
-        TableLayout.LayoutParams itemParams = new TableLayout.LayoutParams(
-                TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1f);
+        TableRow.LayoutParams itemParams = new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 
         // create table layout
-        TableLayout tableLayout = new TableLayout(this);
-        tableLayout.setLayoutParams(tableParams);
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.cape_table);
         tableLayout.setBackgroundColor(COLOR_TABLE);
 
         // fill table entries
         Log.d(DEBUG_TAG, "Table Size: " + tableContent.size());
-        // header
-        //if (tableContent != null) {
+        //header
             int headerLinkCol = 0;
             {
                 TableRow tableRow = new TableRow(this);
@@ -82,7 +71,7 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
                         textView.setBackgroundColor(COLOR_HEADER);
                         textView.setText(tableContent.get(0).get(col));
                         tableRow.addView(textView);
-                        Log.d(DEBUG_TAG, textView.getText().toString());
+                        //Log.d(DEBUG_TAG, textView.getText().toString());
                     } else headerLinkCol = col;
                 tableLayout.addView(tableRow);
             }
@@ -97,12 +86,11 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
                         textView.setBackgroundColor(COLOR_ENTRY);
                         textView.setText(tableContent.get(row).get(col));
                         tableRow.addView(textView);
-                        Log.d(DEBUG_TAG, textView.getText().toString());
+                        //Log.d(DEBUG_TAG, textView.getText().toString());
                     }
                 tableLayout.addView(tableRow);
             }
-        //}
-        return tableLayout;
+        tableLayout.requestLayout();
     }
 
 }
