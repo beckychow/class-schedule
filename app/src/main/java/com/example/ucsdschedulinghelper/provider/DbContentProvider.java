@@ -220,4 +220,32 @@ public class DbContentProvider extends ContentProvider {
 
     public String getType(Uri uri) { return null; }
 
+    /* returns a cursor with all plan entries */
+    public Cursor getAllPlanEntries() {
+        String[] projection = { PlanEntry._ID, PlanEntry.COLUMN_COURSE_NAME,
+                PlanEntry.COLUMN_YEAR_USER, PlanEntry.COLUMN_QUARTER_USER,
+                PlanEntry.COLUMN_COURSE_ID };
+        return query(CONTENT_PLAN_URI, projection, null, null, null);
+    }
+
+    /* resets user-configured plan to its default layout */
+    public void resetPlanToDefault() {
+        Cursor cursor = getAllPlanEntries();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String planEntryId = cursor.getString(cursor.getColumnIndexOrThrow(PlanEntry._ID));
+            Uri uri = Uri.withAppendedPath(CONTENT_PLAN_URI, planEntryId);
+
+            int planEntryYearDefault = cursor.getInt(cursor.getColumnIndexOrThrow(
+                    PlanEntry.COLUMN_YEAR_USER));
+            int planEntryQuarterDefault = cursor.getInt(cursor.getColumnIndexOrThrow(
+                    PlanEntry.COLUMN_QUARTER_DEFAULT));
+
+            ContentValues values = new ContentValues();
+            values.put(PlanEntry.COLUMN_YEAR_USER, planEntryYearDefault);
+            values.put(PlanEntry.COLUMN_QUARTER_USER, planEntryQuarterDefault);
+            update(uri, values, null, null);
+            cursor.moveToNext();
+        }
+    }
 }
