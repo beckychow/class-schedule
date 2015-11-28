@@ -223,6 +223,7 @@ public class DbContentProvider extends ContentProvider {
             String[] selectionArgs, String sortOrder) {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        boolean courseQuery;
         queryBuilder.setTables(Course.TABLE_NAME);
         /**
          * Choose the table to query and a sort order based on the code returned for the incoming
@@ -232,6 +233,7 @@ public class DbContentProvider extends ContentProvider {
             // If the incoming URI was for all of 'courses'
             case COURSES:
                 if (TextUtils.isEmpty(sortOrder)) sortOrder = "_ID ASC";
+                courseQuery = true;
                 break;
 
             // If the incoming URI was for a single row of 'courses'
@@ -242,14 +244,17 @@ public class DbContentProvider extends ContentProvider {
                  * Then, append the value to the WHERE clause for the query.
                  */
                 selection = Course._ID + EQUALS + uri.getLastPathSegment();
+                courseQuery = true;
                 break;
 
             case PLAN:
                 if (TextUtils.isEmpty(sortOrder)) sortOrder = "_ID ASC";
+                courseQuery = false;
                 break;
 
             case PLAN_ITEM_ID:
                 selection = PlanEntry._ID + EQUALS + uri.getLastPathSegment();
+                courseQuery = false;
                 break;
 
             case PLAN_ALL:
@@ -257,11 +262,17 @@ public class DbContentProvider extends ContentProvider {
                 projection = new String[] {PlanEntry._ID, PlanEntry.COLUMN_COURSE_NAME,
                         PlanEntry.COLUMN_YEAR_USER, PlanEntry.COLUMN_QUARTER_USER,
                         PlanEntry.COLUMN_COURSE_ID};
+                courseQuery = false;
                 break;
 
             default:
                 throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
+        if (courseQuery)
+            queryBuilder.setTables(Course.TABLE_NAME);
+        else
+            queryBuilder.setTables(PlanEntry.TABLE_NAME);
+
         db = mDbHelper.getWritableDatabase();
 
         Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs,
