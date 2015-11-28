@@ -42,7 +42,8 @@
             android:grantUriPermissions="true" >
         </provider>
 
-        <activity android:name=".ui.cape.CapeMainActivity"
+        <activity
+            android:name=".ui.cape.CapeMainActivity"
             android:label="Cape" >
         </activity>
     </application>
