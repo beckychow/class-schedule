@@ -26,7 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Course.COLUMN_COMPLETED + INT_TYPE + COMMA_SEP +
             Course.COLUMN_IN_PROGRESS + INT_TYPE + COMMA_SEP +
             Course.COLUMN_SOI + INT_TYPE + COMMA_SEP +
-            Course.COLUMN_PREREQUISITES + TEXT_TYPE +
+            Course.COLUMN_PREREQUISITES + TEXT_TYPE + COMMA_SEP +
+            Course.COLUMN_IS_UPDATED + INT_TYPE +
             " )";
     private static final String SQL_PLAN_CREATE_ENTRIES = "CREATE TABLE " + PlanEntry.TABLE_NAME + " (" +
             PlanEntry._ID + " INTEGER PRIMARY KEY, " +
@@ -35,14 +36,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             PlanEntry.COLUMN_QUARTER_DEFAULT + INT_TYPE + COMMA_SEP +
             PlanEntry.COLUMN_YEAR_USER + INT_TYPE + COMMA_SEP +
             PlanEntry.COLUMN_QUARTER_USER + INT_TYPE + COMMA_SEP +
-            PlanEntry.COLUMN_COURSE_ID + INT_TYPE +
+            PlanEntry.COLUMN_COURSE_ID + INT_TYPE + COMMA_SEP +
+            Course.COLUMN_IS_UPDATED + INT_TYPE +
             " )";
 
     public static final String SQL_COURSE_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + Course.TABLE_NAME;
     public static final String SQL_PLAN_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + PlanEntry.TABLE_NAME;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "CoursesCollectionAndPlan.db";
 
     public DatabaseHelper(Context context) {

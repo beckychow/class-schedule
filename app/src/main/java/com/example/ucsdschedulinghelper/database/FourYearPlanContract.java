@@ -17,5 +17,6 @@ public final class FourYearPlanContract {
         public static final String COLUMN_YEAR_USER = "year_user";
         public static final String COLUMN_QUARTER_USER = "quarter_user";
         public static final String COLUMN_COURSE_ID = "course_id";
+        public static final String COLUMN_IS_UPDATED = "is_updated";
     }
 }

@@ -89,20 +89,29 @@
         android:orientation="horizontal"
         android:layout_gravity="center_horizontal">
 
-        <Button android:id="@+id/buttonToListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        android:onClick="showCourseList"
-        android:layout_gravity="left"
-        />
+        <Button android:id="@+id/buttonSubmitInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:onClick="submitInfo"
+            android:enabled="false"
+            />
+
+        <Button android:id="@+id/buttonToCourseListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/course_view"
+            android:onClick="showCourseList"
+            android:enabled="false"
+            />
 
         <Button android:id="@+id/buttonToFourYearPlan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/fyp"
             android:onClick="showFourYearPlan"
-            android:layout_gravity="right"/>
+            android:enabled="false"
+            />
 
     </LinearLayout>
 

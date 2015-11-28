@@ -14,12 +14,12 @@ import java.util.concurrent.ExecutionException;
 
 import com.example.ucsdschedulinghelper.parser.CourseDescriptionParser;
 import com.example.ucsdschedulinghelper.parser.PlanParser;
-import com.example.ucsdschedulinghelper.ui.cape.CapeMainActivity;
 import com.example.ucsdschedulinghelper.ui.courseListView.ListViewLoader;
 import com.example.ucsdschedulinghelper.ui.fourYearPlan.fypView;
 
 public class MajorChoiceActivity extends AppCompatActivity {
 
+    private String majorCode = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -37,26 +37,24 @@ public class MajorChoiceActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-
-        try {
-            changeText();
-        } catch (Exception e)
-        {
-            Log.e("MajorChoiceActivity", "changeText()" + e);
-        }
+        parseCourses();
     }
 
     // test parser
-    private void changeText() throws ExecutionException, InterruptedException{
+    private void parseCourses() {
+        CourseDescriptionParser cdp = new CourseDescriptionParser(this, getContentResolver(),
+                "http://www.ucsd.edu/catalog/courses/CSE.html");
+        cdp.parseContent();
+    }
+
+    private void parsePlan(String collegeCode, String majorCode) throws ExecutionException, InterruptedException{
         /*FetchDataFromHttp fetchDataFromHttp = new FetchDataFromHttp(getApplicationContext(),
                 "http://www.ucsd.edu/catalog/courses/CSE.html");
         final TextView textView = (TextView) this.findViewById(R.id.message);*/
-        CourseDescriptionParser cdp = new CourseDescriptionParser(this, getContentResolver(),
-                                            "http://www.ucsd.edu/catalog/courses/CSE.html");
-        cdp.parseContent();
 
         PlanParser pdp = new PlanParser(this, getContentResolver(),
-                "http://plans.ucsd.edu/controller.php?action=LoadPlans&college=RE&year=2015&major=CS25");
+                "http://plans.ucsd.edu/controller.php?action=LoadPlans&college="
+                + collegeCode + "&year=2015&major=" + majorCode);
         pdp.parseContent();
     }
 
@@ -83,6 +81,16 @@ public class MajorChoiceActivity extends AppCompatActivity {
     }
 
     private static final int REQUEST_CODE = 01;
+    public void submitInfo(View view) {
+        updateButtons(false, true);
+        try {
+            parsePlan("WA", majorCode);
+        }
+        catch (Exception e) {
+            Log.e(getLocalClassName(), "parsePlan()" + e);
+        }
+    }
+
     public void showCourseList(View view) {
         Intent intent = new Intent(this, ListViewLoader.class);
         startActivity(intent);
@@ -102,18 +110,28 @@ public class MajorChoiceActivity extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.cs_button:
                 if (checked)
+                    majorCode = "CS26";
                     break;
             case R.id.cs_bio_button:
                 if (checked)
+                    majorCode = "CS27";
                     break;
             case R.id.comp_eng_button:
                 if (checked)
+                    majorCode = "CS25";
                     break;
             case R.id.cs_ba_button:
                 if (checked)
+                    majorCode = "CS28";
                     break;
         }
+        updateButtons(true, false);
     }
 
+    private void updateButtons(boolean submissionAccess, boolean navigationAccess) {
+        findViewById(R.id.buttonSubmitInfo).setEnabled(submissionAccess);
+        findViewById(R.id.buttonToCourseListView).setEnabled(navigationAccess);
+        findViewById(R.id.buttonToFourYearPlan).setEnabled(navigationAccess);
+    }
 
 }

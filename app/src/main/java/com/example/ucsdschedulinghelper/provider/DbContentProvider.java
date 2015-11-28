@@ -28,8 +28,16 @@ public class DbContentProvider extends ContentProvider {
 
     private static final int COURSES = 00;
     private static final int COURSES_ITEM_ID = 01;
+    private static final int COURSES_RESET_UPDATED = 03;
+    private static final int COURSES_DELETE_OLD = 04;
+
     private static final int PLAN = 10;
     private static final int PLAN_ITEM_ID = 11;
+    private static final int PLAN_ALL = 12;
+    private static final int PLAN_RESET_UPDATED = 13;
+    private static final int PLAN_DELETE_OLD = 14;
+
+    private static final int FALSE = 0;
 
     private static final String AUTHORITY = "com.example.ucsdschedulinghelper.provider";
     private static final String COURSES_BASE_PATH = "courses";
@@ -41,6 +49,10 @@ public class DbContentProvider extends ContentProvider {
     public static final Uri CONTENT_PLAN_URI = Uri.parse("content://" + AUTHORITY + "/" + PLAN_BASE_PATH);
     public static final String CONTENT_PLAN_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/plan";
 
+    public static final String ALL_PATH_AUX = "all";
+    public static final String RESET_UPDATED_PATH_AUX = "reset_updated";
+    public static final String DELETE_OLD_PATH_AUX = "delete_old";
+
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     /**
      * The calls to addURI() go here, for all of the content URI patterns that the provider
@@ -49,8 +61,13 @@ public class DbContentProvider extends ContentProvider {
     static {
         sUriMatcher.addURI(AUTHORITY, COURSES_BASE_PATH, COURSES);
         sUriMatcher.addURI(AUTHORITY, COURSES_BASE_PATH + "/#", COURSES_ITEM_ID);
+        sUriMatcher.addURI(AUTHORITY, COURSES_BASE_PATH + "/" + RESET_UPDATED_PATH_AUX, COURSES_RESET_UPDATED);
+        sUriMatcher.addURI(AUTHORITY, COURSES_BASE_PATH + "/" + DELETE_OLD_PATH_AUX, COURSES_DELETE_OLD);
         sUriMatcher.addURI(AUTHORITY, PLAN_BASE_PATH, PLAN);
         sUriMatcher.addURI(AUTHORITY, PLAN_BASE_PATH + "/#", PLAN_ITEM_ID);
+        sUriMatcher.addURI(AUTHORITY, PLAN_BASE_PATH + "/" + ALL_PATH_AUX, PLAN_ALL);
+        sUriMatcher.addURI(AUTHORITY, PLAN_BASE_PATH + "/" + RESET_UPDATED_PATH_AUX, PLAN_RESET_UPDATED);
+        sUriMatcher.addURI(AUTHORITY, PLAN_BASE_PATH + "/" + DELETE_OLD_PATH_AUX, PLAN_DELETE_OLD);
     }
 
     public boolean onCreate() {
@@ -104,6 +121,10 @@ public class DbContentProvider extends ContentProvider {
                             Course._ID + EQUALS + courseId + AND + selection, selectionArgs);
                 }
                 break;
+            case COURSES_DELETE_OLD:
+                db.delete(Course.TABLE_NAME, Course.COLUMN_IS_UPDATED + EQUALS + FALSE, null);
+                break;
+
             case PLAN:
                 rowsDeleted = db.delete(PlanEntry.TABLE_NAME, selection,
                         selectionArgs);
@@ -118,6 +139,10 @@ public class DbContentProvider extends ContentProvider {
                             PlanEntry._ID + EQUALS + planEntryId + AND + selection, selectionArgs);
                 }
                 break;
+            case PLAN_DELETE_OLD:
+                db.delete(PlanEntry.TABLE_NAME, PlanEntry.COLUMN_IS_UPDATED + EQUALS + FALSE, null);
+                break;
+
             default:
                 throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
@@ -129,9 +154,12 @@ public class DbContentProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         db = mDbHelper.getWritableDatabase();
         int rowsUpdated = 0;
+        boolean requiresInsertion = false;
         switch (sUriMatcher.match(uri)) {
             case COURSES:
+                values.put(Course.COLUMN_IS_UPDATED, true);
                 rowsUpdated = db.update(Course.TABLE_NAME, values, selection, selectionArgs);
+                requiresInsertion = true;
                 break;
 
             case COURSES_ITEM_ID:
@@ -144,8 +172,19 @@ public class DbContentProvider extends ContentProvider {
                 }
                 break;
 
+            case COURSES_RESET_UPDATED:
+                if (values != null)
+                    values.clear();
+                else
+                    values = new ContentValues();
+                values.put(Course.COLUMN_IS_UPDATED, false);
+                db.update(Course.TABLE_NAME, values, null, null);
+                break;
+
             case PLAN:
+                values.put(PlanEntry.COLUMN_IS_UPDATED, true);
                 rowsUpdated = db.update(PlanEntry.TABLE_NAME, values, selection, selectionArgs);
+                requiresInsertion = true;
                 break;
 
             case PLAN_ITEM_ID:
@@ -158,11 +197,20 @@ public class DbContentProvider extends ContentProvider {
                 }
                 break;
 
+            case PLAN_RESET_UPDATED:
+                if (values != null)
+                    values.clear();
+                else
+                    values = new ContentValues();
+                values.put(PlanEntry.COLUMN_IS_UPDATED, false);
+                db.update(PlanEntry.TABLE_NAME, values, null, null);
+                break;
+
             default:
                 throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
         // if such entry does not exist in the table
-        if (rowsUpdated == 0) {
+        if (rowsUpdated == 0 && requiresInsertion) {
             insert(uri, values);
         }
 
@@ -204,9 +252,15 @@ public class DbContentProvider extends ContentProvider {
                 selection = PlanEntry._ID + EQUALS + uri.getLastPathSegment();
                 break;
 
-            default:
-                // TODO: If the URI is not recognized (error handling)
+            case PLAN_ALL:
+                if (TextUtils.isEmpty(sortOrder)) sortOrder = "_ID ASC";
+                projection = new String[] {PlanEntry._ID, PlanEntry.COLUMN_COURSE_NAME,
+                        PlanEntry.COLUMN_YEAR_USER, PlanEntry.COLUMN_QUARTER_USER,
+                        PlanEntry.COLUMN_COURSE_ID};
                 break;
+
+            default:
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
         db = mDbHelper.getWritableDatabase();
 
@@ -221,6 +275,7 @@ public class DbContentProvider extends ContentProvider {
     public String getType(Uri uri) { return null; }
 
     /* returns a cursor with all plan entries */
+    /* NOT USED */
     public Cursor getAllPlanEntries() {
         String[] projection = { PlanEntry._ID, PlanEntry.COLUMN_COURSE_NAME,
                 PlanEntry.COLUMN_YEAR_USER, PlanEntry.COLUMN_QUARTER_USER,
@@ -229,6 +284,7 @@ public class DbContentProvider extends ContentProvider {
     }
 
     /* resets user-configured plan to its default layout */
+    /* TODO: make it usable with getContentResolver() */
     public void resetPlanToDefault() {
         Cursor cursor = getAllPlanEntries();
         cursor.moveToFirst();

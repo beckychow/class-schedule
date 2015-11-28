@@ -3,6 +3,7 @@ package com.example.ucsdschedulinghelper.parser;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.ucsdschedulinghelper.provider.DbContentProvider;
@@ -60,6 +61,7 @@ public class CourseDescriptionParser extends MyHtmlParser {
             int index = content.indexOf(DIVISION_TAG);
             final String[] division = {"Lower", "Upper", "Graduate"};
             // int divi = 0;
+            prepareDatabaseBeforeUpdate();
             while (index != -1) {
                 int next_idx = content.indexOf(DIVISION_TAG, index + DIVISION_TAG.length());
                 // get description for each class in one division
@@ -109,15 +111,20 @@ public class CourseDescriptionParser extends MyHtmlParser {
                     String code = fullCode.substring(indexOfTheDivider + 1);
 
                     //changeText(id, department, code, title, description, units);
-                    addToDatabase(id, department, code, title, description, units, prerequisites);
+                    updateDatabase(id, department, code, title, description, units, prerequisites);
                 }
                 index = next_idx;
             }
+            deleteOldEntriesFromDatabase();
             return null;
         }
 
+        private void prepareDatabaseBeforeUpdate() {
+            contentResolver.update(Uri.withAppendedPath(DbContentProvider.CONTENT_COURSES_URI,
+                    DbContentProvider.RESET_UPDATED_PATH_AUX), null, null, null);
+        }
 
-        private void addToDatabase(String id, String department, String code, String title,
+        private void updateDatabase(String id, String department, String code, String title,
                                    String description, String units, String prerequisites) {
             // Create a new map of values, where column names are the keys
             ContentValues values = new ContentValues();
@@ -133,6 +140,11 @@ public class CourseDescriptionParser extends MyHtmlParser {
             String[] selectionArgs = {id};
             contentResolver.update(DbContentProvider.CONTENT_COURSES_URI, values,
                     selection, selectionArgs);
+        }
+
+        private void deleteOldEntriesFromDatabase() {
+            contentResolver.delete(Uri.withAppendedPath(DbContentProvider.CONTENT_COURSES_URI,
+                    DbContentProvider.DELETE_OLD_PATH_AUX), null, null);
         }
 
         private void changeText(String id, String department, String code, String title,

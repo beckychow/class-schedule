@@ -5,6 +5,7 @@
     <string name="choose_quarter">Choose quarter of entering UCSD</string>
     <string name="choose_year">Choose year of entering UCSD</string>
     <string name="submit">Submit</string>
+    <string name="course_view">List of Courses</string>
     <string name="fyp">Four Year Plan</string>
     <string name="computer_science">Computer Science (B.S.)</string>
     <string name="cs_bio">Computer Science with Bioinformatics</string>

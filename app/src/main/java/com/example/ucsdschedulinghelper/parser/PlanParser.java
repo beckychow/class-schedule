@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
@@ -15,6 +16,9 @@ import com.example.ucsdschedulinghelper.provider.DbContentProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Huayin Zhou on 11/15/15.
@@ -40,6 +44,8 @@ public class PlanParser extends MyHtmlParser {
 
         @Override
         public Void doInBackground(FetchDataFromHttp... params) {
+            ArrayList<String[]> data = new ArrayList<>();
+            boolean success = true;
             try {
                 JSONArray jsonArray = new JSONArray(fetchDataFromHttp.getResults());
                 JSONObject plan = jsonArray.getJSONObject(0);
@@ -56,14 +62,24 @@ public class PlanParser extends MyHtmlParser {
                             String quarter_taken = course.getString("quarter_taken");
                             // test
                             //changeText(course_name, year_taken, quarter_taken);
-                            addToDatabase(course_name, year_taken, quarter_taken);
+                            data.add(new String[] {course_name, year_taken, quarter_taken});
                         }
                     }
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
+                success = false;
             }
+
+            if (success) {
+                prepareDatabaseBeforeUpdate();
+                for (String[] planEntryData : data) {
+                    updateDatabase(planEntryData[0], planEntryData[1], planEntryData[2]);
+                }
+                deleteOldEntriesFromDatabase();
+            }
+
             return null;
         }
 
@@ -81,7 +97,12 @@ public class PlanParser extends MyHtmlParser {
     }
 
     /** Additions by SKE **/
-    private void addToDatabase(String courseName, String year, String quarter) {
+    private void prepareDatabaseBeforeUpdate() {
+        contentResolver.update(Uri.withAppendedPath(DbContentProvider.CONTENT_PLAN_URI,
+                DbContentProvider.RESET_UPDATED_PATH_AUX), null, null, null);
+    }
+
+    private void updateDatabase(String courseName, String year, String quarter) {
         ContentValues values = new ContentValues();
 
         courseName = courseName.trim();
@@ -97,6 +118,11 @@ public class PlanParser extends MyHtmlParser {
 
         contentResolver.update(DbContentProvider.CONTENT_PLAN_URI, values,
                 selection, selectionArgs);
+    }
+
+    private void deleteOldEntriesFromDatabase() {
+        contentResolver.delete(Uri.withAppendedPath(DbContentProvider.CONTENT_PLAN_URI,
+                DbContentProvider.DELETE_OLD_PATH_AUX), null, null);
     }
 
     private int findCorrespondingCourseId(String courseName) {
