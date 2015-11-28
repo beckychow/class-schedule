@@ -76,8 +76,8 @@ public class DbContentProvider extends ContentProvider {
     }
 
     public Uri insert(Uri uri, ContentValues values) {
-        boolean isCourse = false;
-        long id = 0;
+        boolean isCourse;
+        long id;
         db = mDbHelper.getWritableDatabase();
 
         switch (sUriMatcher.match(uri)) {
@@ -89,6 +89,7 @@ public class DbContentProvider extends ContentProvider {
                 isCourse = true;
                 break;
             case PLAN:
+                values.put(PlanEntry.COLUMN_IS_UPDATED, true);
                 id = db.insert(PlanEntry.TABLE_NAME, null, values);
                 isCourse = false;
                 break;
@@ -141,6 +142,9 @@ public class DbContentProvider extends ContentProvider {
                 break;
             case PLAN_DELETE_OLD:
                 db.delete(PlanEntry.TABLE_NAME, PlanEntry.COLUMN_IS_UPDATED + EQUALS + FALSE, null);
+                break;
+            case PLAN_ALL:
+                db.delete(PlanEntry.TABLE_NAME, null, null);
                 break;
 
             default:
