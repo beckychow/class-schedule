@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.ucsdschedulinghelper.R;
@@ -63,6 +64,7 @@ public class PlanParser extends MyHtmlParser {
                             // test
                             //changeText(course_name, year_taken, quarter_taken);
                             data.add(new String[] {course_name, year_taken, quarter_taken});
+                            //Log.e("PARSE", course_name + " | " + year_taken + " | " + quarter_taken);
                         }
                     }
                 }
@@ -73,11 +75,12 @@ public class PlanParser extends MyHtmlParser {
             }
 
             if (success) {
-                prepareDatabaseBeforeUpdate();
+                // prepareDatabaseBeforeUpdate();
+                deletePreviousEntriesFromDatabase();
                 for (String[] planEntryData : data) {
                     updateDatabase(planEntryData[0], planEntryData[1], planEntryData[2]);
                 }
-                deleteOldEntriesFromDatabase();
+                // deleteOldEntriesFromDatabase();
             }
 
             return null;
@@ -102,6 +105,11 @@ public class PlanParser extends MyHtmlParser {
                 DbContentProvider.RESET_UPDATED_PATH_AUX), null, null, null);
     }
 
+    private void deletePreviousEntriesFromDatabase() {
+        contentResolver.delete(Uri.withAppendedPath(DbContentProvider.CONTENT_PLAN_URI,
+                DbContentProvider.ALL_PATH_AUX), null, null);
+    }
+
     private void updateDatabase(String courseName, String year, String quarter) {
         ContentValues values = new ContentValues();
 
@@ -113,11 +121,12 @@ public class PlanParser extends MyHtmlParser {
         values.put(PlanEntry.COLUMN_QUARTER_USER, quarter);
         values.put(PlanEntry.COLUMN_COURSE_ID, findCorrespondingCourseId(courseName));
 
-        String selection = PlanEntry.COLUMN_COURSE_NAME + " LIKE ?";
-        String[] selectionArgs = {courseName};
+        // String selection = PlanEntry.COLUMN_COURSE_NAME + " LIKE ?";
+        // String[] selectionArgs = {courseName};
 
-        contentResolver.update(DbContentProvider.CONTENT_PLAN_URI, values,
-                selection, selectionArgs);
+        // contentResolver.update(DbContentProvider.CONTENT_PLAN_URI, values,
+        //        selection, selectionArgs);
+        contentResolver.insert(DbContentProvider.CONTENT_PLAN_URI, values);
     }
 
     private void deleteOldEntriesFromDatabase() {
