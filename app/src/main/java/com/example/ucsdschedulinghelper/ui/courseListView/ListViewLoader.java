@@ -102,7 +102,7 @@ public class ListViewLoader extends ListActivity
         getLoaderManager().initLoader(0, null, this);
 
 
-        setContentView(R.layout.navigation_drawer);
+        setContentView(R.layout.nav_drawer_list);
         mSearchView = (SearchView) findViewById(R.id.list_search);
         mListView = (ListView) findViewById(android.R.id.list);
         mListView.setTextFilterEnabled(true);
@@ -129,7 +129,6 @@ public class ListViewLoader extends ListActivity
             super.onBackPressed();
         }
     }
-
 
 
     // Called when a new Loader needs to be created

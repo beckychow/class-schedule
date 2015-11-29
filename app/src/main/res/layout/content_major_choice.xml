@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"/>
 
-    <TextView
+  <!--  <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_heading"
@@ -71,23 +71,23 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="20dp"/>-->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_heading"
-        android:text="@string/choose_year"
+        android:text="@string/choose_college"
         android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="18dp"/>
     <Spinner
-        android:id="@+id/year_grad_spinner"
+        android:id="@+id/college_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:spinnerMode="dropdown"
-        android:entries="@array/grad_year"/>
+        android:entries="@array/college"/>
 
     <View
         android:layout_width="match_parent"
@@ -132,6 +132,7 @@
         android:scrollbars="vertical"
         android:typeface="monospace"
         android:layout_gravity="center"
+        android:visibility="invisible"
         />
 
 </LinearLayout>
