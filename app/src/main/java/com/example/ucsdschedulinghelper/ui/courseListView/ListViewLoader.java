@@ -9,8 +9,14 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -19,10 +25,14 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.support.design.widget.NavigationView;
 
+
+import com.example.ucsdschedulinghelper.MajorChoiceActivity;
 import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.database.CoursesCollectionContract;
 import com.example.ucsdschedulinghelper.provider.DbContentProvider;
+import com.example.ucsdschedulinghelper.ui.fourYearPlan.fypView;
 
 import java.util.ArrayList;
 
@@ -30,7 +40,7 @@ import java.util.ArrayList;
  * Created by SKE on 5/11/15.
  */
 public class ListViewLoader extends ListActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
+        implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener, NavigationView.OnNavigationItemSelectedListener {
 
     // This is the Adapter being used to display the list's data
     SimpleCursorAdapter mAdapter;
@@ -53,6 +63,10 @@ public class ListViewLoader extends ListActivity
     private static String sortOrder = "";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //setContentView(R.layout.navigation_drawer);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         // Create a progress bar to display while the list loads
         ProgressBar progressBar = new ProgressBar(this);
@@ -88,12 +102,35 @@ public class ListViewLoader extends ListActivity
         getLoaderManager().initLoader(0, null, this);
 
 
-        setContentView(R.layout.list_view);
+        setContentView(R.layout.navigation_drawer);
         mSearchView = (SearchView) findViewById(R.id.list_search);
         mListView = (ListView) findViewById(android.R.id.list);
         mListView.setTextFilterEnabled(true);
         setupSearchView();
+
+
+        /* Navigation Drawer */
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
 
     // Called when a new Loader needs to be created
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -210,5 +247,37 @@ public class ListViewLoader extends ListActivity
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+
+            Intent intent = new Intent(this, MajorChoiceActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_settings) {
+
+            Intent intent = new Intent(this, MajorChoiceActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_fyp) {
+
+            Intent intent = new Intent(this, fypView.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_cadd) {
+
+        } else if (id == R.id.nav_cip) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

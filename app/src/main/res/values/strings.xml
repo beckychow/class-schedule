@@ -12,6 +12,8 @@
     <string name="computer_engineering">Computer Engineering</string>
     <string name="computer_science_ba">Computer Science (B.A.)</string>
     <string name="cape">CAPE</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string-array name="grad_quarter">
         <item>Fall</item>
         <item>Winter</item>
