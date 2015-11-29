@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_fyp"
+            android:title="Four Year Plan" />
+        <item
+            android:id="@+id/nav_settings"
+            android:title="Settings" />
+    </group>
+
+    <item android:title="Classes">
+        <menu>
+            <item
+                android:id="@+id/nav_cadd"
+                android:title="Classes Added" />
+            <item
+                android:id="@+id/nav_cip"
+                android:title="Classes in Progress" />
+        </menu>
+    </item>
+
+</menu>
