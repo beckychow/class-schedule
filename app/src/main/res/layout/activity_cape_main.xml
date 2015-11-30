@@ -5,31 +5,68 @@
     android:id="@+id/activity_cape_main"
     android:orientation="vertical"
     tools:context="com.example.ucsdschedulinghelper.ui.cape.CapeMainActivity">
-    <ScrollView
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content">
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TableLayout
-                        android:id="@+id/cape_table_fixed"
+                    android:id="@+id/cape_header_fixed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:showDividers="middle">
+                </TableLayout>
+                <com.example.ucsdschedulinghelper.ui.cape.ObservableHorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cape_header_scroll"
+                    android:scrollbars="none"
+                    android:paddingRight="10dp">
+                    <TableLayout
+                        android:id="@+id/cape_header"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:showDividers="middle">
-                </TableLayout>
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TableLayout
-                        android:paddingLeft="10dp"
-                        android:id="@+id/cape_table"
+                    </TableLayout>
+                </com.example.ucsdschedulinghelper.ui.cape.ObservableHorizontalScrollView>
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:showDividers="middle"
-                        >
-                    </TableLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
-    </ScrollView>
+                        android:orientation="horizontal">
+                        <TableLayout
+                                android:id="@+id/cape_table_fixed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:showDividers="middle">
+                        </TableLayout>
+                        <com.example.ucsdschedulinghelper.ui.cape.ObservableHorizontalScrollView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cape_table_scroll"
+                            android:paddingRight="10dp">
+                            <TableLayout
+                                android:id="@+id/cape_table"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:showDividers="middle"
+                                >
+                            </TableLayout>
+                        </com.example.ucsdschedulinghelper.ui.cape.ObservableHorizontalScrollView>
+                    </LinearLayout>
+            </ScrollView>
+        </TableRow>
+    </TableLayout>
 </LinearLayout>

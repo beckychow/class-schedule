@@ -16,7 +16,8 @@ import com.example.ucsdschedulinghelper.parser.OnDataSendToActivity;
 
 import java.util.List;
 
-public class CapeMainActivity extends AppCompatActivity implements OnDataSendToActivity {
+public class CapeMainActivity extends AppCompatActivity
+                                implements OnDataSendToActivity, ScrollViewListener {
     static final String DEBUG_TAG = "CapeMainActivity";
     static final String CAPE_MAIN_PAGE = "http://cape.ucsd.edu/responses/Results.aspx?courseNumber=";
     static final String HEADER_LINK = "Course";
@@ -25,6 +26,8 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
     static final int COLOR_ENTRY = Color.WHITE;
     List<List<String>> tableContent;
     String department, code;
+    ObservableHorizontalScrollView headerScroll;
+    ObservableHorizontalScrollView tableScroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,14 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
         department = intent.getStringExtra(CoursesCollectionContract.Course.COLUMN_DEPARTMENT);
         code = intent.getStringExtra(CoursesCollectionContract.Course.COLUMN_CODE);
         new CapeParser(this, CAPE_MAIN_PAGE + department + "+" + code);
+        // set scroll listener
+        headerScroll = (ObservableHorizontalScrollView) findViewById(R.id.cape_header_scroll);
+        tableScroll =  (ObservableHorizontalScrollView) findViewById(R.id.cape_table_scroll);
+        tableScroll.setScrollViewListener(this);
+    }
+
+    public void onScrollChanged(ObservableHorizontalScrollView view, int x, int y, int oldx, int oldy) {
+            headerScroll.scrollTo(x, y);
     }
 
     public void sendData(List table) {
@@ -55,6 +66,8 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
                 TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 
         // create table layout
+        TableLayout fixedHeaderLayout = (TableLayout) findViewById(R.id.cape_header_fixed);
+        TableLayout headerLayout = (TableLayout) findViewById(R.id.cape_header);
         TableLayout fixedTableLayout = (TableLayout) findViewById(R.id.cape_table_fixed);
         TableLayout tableLayout = (TableLayout) findViewById(R.id.cape_table);
         tableLayout.setBackgroundColor(COLOR_TABLE);
@@ -77,14 +90,16 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
                     textView.setBackgroundColor(COLOR_HEADER);
                     textView.setText(tableContent.get(0).get(col));
                     textView.setPadding(30, 10, 0, 0);
+                    textView.measure(0, 0);
+                    //textView.setWidth(textView.getMeasuredWidth());
                     if (col == 0)
                         fixedTableRow.addView(textView);
                     else tableRow.addView(textView);
                     //Log.d(DEBUG_TAG, textView.getText().toString());
                 } else headerLinkCol = col;
             }
-            fixedTableLayout.addView(fixedTableRow);
-            tableLayout.addView(tableRow);
+            fixedHeaderLayout.addView(fixedTableRow);
+            headerLayout.addView(tableRow);
         }
 
         // entries
@@ -101,15 +116,40 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
                     textView.setBackgroundColor(COLOR_ENTRY);
                     textView.setText(tableContent.get(row).get(col));
                     textView.setPadding(30, 10, 0, 0);
-                    if (col == 0)
+                    textView.measure(0, 0);
+                    // add view to textView and set header width
+                    if (col == 0) {
                         fixedTableRow.addView(textView);
-                    else tableRow.addView(textView);
-                    //Log.d(DEBUG_TAG, textView.getText().toString());
+                        int currentIdx = fixedTableRow.getChildCount() - 1;
+                        TableRow headerRow = (TableRow) fixedHeaderLayout.getChildAt(0);
+                        TextView headerView = (TextView) headerRow.getChildAt(currentIdx);
+                        if (textView.getMeasuredWidth() > headerView.getMeasuredWidth()) {
+                            headerView.setWidth(textView.getMeasuredWidth());
+                            headerView.measure(0,0);
+                        }
+                        else textView.setWidth(headerView.getMeasuredWidth());
+                        //Log.d(DEBUG_TAG, String.format("header:%d", headerView.getMeasuredWidth()));
+                        //Log.d(DEBUG_TAG, String.format("content:%d", textView.getMeasuredWidth()));
+                    } else {
+                        tableRow.addView(textView);
+                        int currentIdx = tableRow.getChildCount() - 1;
+                        TableRow headerRow = (TableRow) headerLayout.getChildAt(0);
+                        TextView headerView = (TextView) headerRow.getChildAt(currentIdx);
+                        if (textView.getMeasuredWidth() > headerView.getMeasuredWidth()) {
+                            headerView.setWidth(textView.getMeasuredWidth());
+                            headerView.measure(0,0);
+                        }
+                        else textView.setWidth(headerView.getMeasuredWidth());
+                    }
+                    // set header width
+
                 }
             }
             fixedTableLayout.addView(fixedTableRow);
             tableLayout.addView(tableRow);
         }
+        fixedHeaderLayout.requestLayout();
+        headerLayout.requestLayout();
         fixedTableLayout.requestLayout();
         tableLayout.requestLayout();
     }
