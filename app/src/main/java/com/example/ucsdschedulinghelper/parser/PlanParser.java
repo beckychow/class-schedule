@@ -32,6 +32,7 @@ public class PlanParser extends MyHtmlParser {
     public PlanParser(Activity activity, ContentResolver contentResolver, String url) {
         super(activity, url);
         this.contentResolver = contentResolver;
+        Log.d("parse", url);
     }
 
     public void parseContent() { new ParseContentToDBTask().execute(fetchDataFromHttp); }
@@ -55,7 +56,7 @@ public class PlanParser extends MyHtmlParser {
                     JSONArray yearList = courseList.getJSONArray(i_courseList);
                     for (int i_yearList = 0; i_yearList < yearList.length(); ++i_yearList) {
                         JSONArray quarterList = yearList.getJSONArray(i_yearList);
-                        for (int i_quarterList = 0; i_quarterList < yearList.length(); ++i_quarterList) {
+                        for (int i_quarterList = 0; i_quarterList < quarterList.length(); ++i_quarterList) {
                             // get one course info
                             JSONObject course = quarterList.getJSONObject(i_quarterList);
                             String course_name = course.getString("course_name");
