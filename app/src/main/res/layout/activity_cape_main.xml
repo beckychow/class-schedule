@@ -3,28 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/activity_cape_main"
+    android:orientation="vertical"
     tools:context="com.example.ucsdschedulinghelper.ui.cape.CapeMainActivity">
     <ScrollView
-        android:id="@+id/cape_scroll"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
-        <RelativeLayout
-            android:id="@+id/cape_scroll_relative"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TableLayout
-                    android:padding="10dp"
-                    android:id="@+id/cape_table"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:showDividers="middle"
-                    >
+                        android:id="@+id/cape_table_fixed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:showDividers="middle">
                 </TableLayout>
-            </HorizontalScrollView>
-        </RelativeLayout>
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TableLayout
+                        android:paddingLeft="10dp"
+                        android:id="@+id/cape_table"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:showDividers="middle"
+                        >
+                    </TableLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
     </ScrollView>
 </LinearLayout>

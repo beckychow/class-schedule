@@ -55,46 +55,62 @@ public class CapeMainActivity extends AppCompatActivity implements OnDataSendToA
                 TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 
         // create table layout
+        TableLayout fixedTableLayout = (TableLayout) findViewById(R.id.cape_table_fixed);
         TableLayout tableLayout = (TableLayout) findViewById(R.id.cape_table);
         tableLayout.setBackgroundColor(COLOR_TABLE);
 
         // fill table entries
         Log.d(DEBUG_TAG, "Table Size: " + tableContent.size());
         //header
-            int headerLinkCol = 0;
-            {
-                TableRow tableRow = new TableRow(this);
-                tableRow.setLayoutParams(rowParams);
-                for (int col = 0; col < tableContent.get(0).size(); ++col) {
-                    if (!tableContent.get(0).get(col).equals(HEADER_LINK)) {
-                        TextView textView = new TextView(this);
-                        textView.setLayoutParams(itemParams);
-                        textView.setBackgroundColor(COLOR_HEADER);
-                        textView.setText(tableContent.get(0).get(col));
-                        textView.setPadding(30, 10, 0, 0);
-                        tableRow.addView(textView);
-                        //Log.d(DEBUG_TAG, textView.getText().toString());
-                    } else headerLinkCol = col;
-                }
-                tableLayout.addView(tableRow);
+        int headerLinkCol = 0;
+        {
+            // fixed column
+            TableRow fixedTableRow = new TableRow(this);
+            fixedTableRow.setLayoutParams(rowParams);
+            // other content
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(rowParams);
+            for (int col = 0; col < tableContent.get(0).size(); ++col) {
+                if (!tableContent.get(0).get(col).equals(HEADER_LINK)) {
+                    TextView textView = new TextView(this);
+                    textView.setLayoutParams(itemParams);
+                    textView.setBackgroundColor(COLOR_HEADER);
+                    textView.setText(tableContent.get(0).get(col));
+                    textView.setPadding(30, 10, 0, 0);
+                    if (col == 0)
+                        fixedTableRow.addView(textView);
+                    else tableRow.addView(textView);
+                    //Log.d(DEBUG_TAG, textView.getText().toString());
+                } else headerLinkCol = col;
             }
-            // entries
-            for (int row = 1; row < tableContent.size(); ++row) {
-                TableRow tableRow = new TableRow(this);
-                tableRow.setLayoutParams(rowParams);
-                for (int col = 0; col < tableContent.get(row).size(); ++col) {
-                    if (col != headerLinkCol) {
-                        TextView textView = new TextView(this);
-                        textView.setLayoutParams(itemParams);
-                        textView.setBackgroundColor(COLOR_ENTRY);
-                        textView.setText(tableContent.get(row).get(col));
-                        textView.setPadding(30, 10, 0, 0);
-                        tableRow.addView(textView);
-                        //Log.d(DEBUG_TAG, textView.getText().toString());
-                    }
+            fixedTableLayout.addView(fixedTableRow);
+            tableLayout.addView(tableRow);
+        }
+
+        // entries
+        for (int row = 1; row < tableContent.size(); ++row) {
+            // fixed column
+            TableRow fixedTableRow = new TableRow(this);
+            fixedTableRow.setLayoutParams(rowParams);
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(rowParams);
+            for (int col = 0; col < tableContent.get(row).size(); ++col) {
+                if (col != headerLinkCol) {
+                    TextView textView = new TextView(this);
+                    textView.setLayoutParams(itemParams);
+                    textView.setBackgroundColor(COLOR_ENTRY);
+                    textView.setText(tableContent.get(row).get(col));
+                    textView.setPadding(30, 10, 0, 0);
+                    if (col == 0)
+                        fixedTableRow.addView(textView);
+                    else tableRow.addView(textView);
+                    //Log.d(DEBUG_TAG, textView.getText().toString());
                 }
-                tableLayout.addView(tableRow);
             }
+            fixedTableLayout.addView(fixedTableRow);
+            tableLayout.addView(tableRow);
+        }
+        fixedTableLayout.requestLayout();
         tableLayout.requestLayout();
     }
 
