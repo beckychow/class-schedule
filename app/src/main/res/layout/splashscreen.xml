@@ -17,10 +17,10 @@
 
     <ImageView
         android:src="@mipmap/splash"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitCenter" />
-
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="@dimen/splash_logo_size"
+        android:layout_height="@dimen/splash_logo_size" />
 
     <ProgressBar
         android:id="@+id/progressBar1"

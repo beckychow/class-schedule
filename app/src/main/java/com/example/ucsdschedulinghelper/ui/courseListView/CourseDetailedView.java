@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -15,6 +16,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +33,11 @@ public class CourseDetailedView extends Activity {
     private Uri courseUri;
     private boolean completed;
     private boolean inProgress;
-    private Button courseCompletionButton, courseInProgressButton;
+    private Button courseCompletionButton, courseInProgressButton, courseCapeButton;
+    private ListView listItem;
     private SpannableString prerequisitesWithLinks;
     private String department, code;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,9 @@ public class CourseDetailedView extends Activity {
 
         courseCompletionButton = (Button) findViewById(R.id.course_detailed_button_completion);
         courseInProgressButton = (Button) findViewById(R.id.course_detailed_button_inprogress);
+        courseCapeButton = (Button) findViewById(R.id.button_cape);
+        courseCapeButton.setBackgroundResource(android.R.drawable.btn_default);
+        //listItem = (ListView) findViewById(android.R.id.course_list_item);
         courseUri = getIntent().getExtras().getParcelable(DbContentProvider.CONTENT_COURSES_ITEM_TYPE);
         fillData(courseUri);
         updateButtons();
@@ -253,15 +260,27 @@ public class CourseDetailedView extends Activity {
         if (!completed) {
             courseCompletionButton.setText("Add to completed");
             courseInProgressButton.setEnabled(true);
+            courseCompletionButton.setBackgroundResource(android.R.drawable.btn_default);
+            //listItem.setBackgroundResource(android.R.drawable.btn_default);
         }
+
         else {
             courseCompletionButton.setText("Remove from completed");
             courseInProgressButton.setEnabled(false);
+            courseCompletionButton.setBackgroundColor(Color.parseColor("#32CD32"));
+            //listItem.setBackgroundColor(Color.parseColor("#32CD32"));
         }
-        if (!inProgress)
+        if (!inProgress) {
             courseInProgressButton.setText("Set in progress");
-        else
+            courseInProgressButton.setBackgroundResource(android.R.drawable.btn_default);
+            //listItem.setBackgroundResource(android.R.drawable.btn_default);
+        }
+
+        else {
             courseInProgressButton.setText("Remove from in progress");
+            courseInProgressButton.setBackgroundColor(Color.parseColor("#F0DD0E"));
+            //listItem.setBackgroundColor(Color.parseColor("#F0DD0E"));
+        }
     }
 
     private Context getContext() {

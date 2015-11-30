@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -33,7 +34,6 @@ import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.database.CoursesCollectionContract;
 import com.example.ucsdschedulinghelper.provider.DbContentProvider;
 import com.example.ucsdschedulinghelper.ui.fourYearPlan.fypView;
-import com.example.ucsdschedulinghelper.ui.courseListView.CourseDetailedView;
 
 import java.util.ArrayList;
 
@@ -42,7 +42,7 @@ import java.util.ArrayList;
  */
 public class ListViewLoader extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener, NavigationView.OnNavigationItemSelectedListener {
-
+    
     // This is the Adapter being used to display the list's data
     SimpleCursorAdapter mAdapter;
     SearchView mSearchView;
@@ -170,7 +170,6 @@ public class ListViewLoader extends ListActivity
         //Log.e(getClass().getSimpleName(), "Uri = " + courseUri.toString());
 
         startActivity(intent);
-        
     }
 
     private void setupSearchView() {
