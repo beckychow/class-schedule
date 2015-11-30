@@ -33,6 +33,7 @@ import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.database.CoursesCollectionContract;
 import com.example.ucsdschedulinghelper.provider.DbContentProvider;
 import com.example.ucsdschedulinghelper.ui.fourYearPlan.fypView;
+import com.example.ucsdschedulinghelper.ui.courseListView.CourseDetailedView;
 
 import java.util.ArrayList;
 
@@ -169,6 +170,7 @@ public class ListViewLoader extends ListActivity
         //Log.e(getClass().getSimpleName(), "Uri = " + courseUri.toString());
 
         startActivity(intent);
+        
     }
 
     private void setupSearchView() {
