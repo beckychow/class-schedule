@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * Created by Freddy on 11/14/2015.
  */
-public class fypView extends Activity implements NavigationView.OnNavigationItemSelectedListener {
+public class fypView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     LinkedHashMap<String, List<String>> quarters;
     List<String> classes;
     ExpandableListView exp_list;

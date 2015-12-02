@@ -29,6 +29,11 @@ public class MajorChoiceActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        findViewById(R.id.buttonSubmitInfo).setBackgroundResource(android.R.drawable.btn_default);
+        findViewById(R.id.buttonToFourYearPlan).setBackgroundResource(android.R.drawable.btn_default);
+        findViewById(R.id.buttonToCourseListView).setBackgroundResource(android.R.drawable.btn_default);
+
+
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

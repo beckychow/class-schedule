@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">25dp</dimen>
     <dimen name="activity_vertical_margin">25dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="splash_logo_size">180dp</dimen>
 </resources>
