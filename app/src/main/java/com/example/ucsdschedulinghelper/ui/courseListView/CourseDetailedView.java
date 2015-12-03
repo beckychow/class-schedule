@@ -106,7 +106,7 @@ public class CourseDetailedView extends Activity {
             if (completed)
                 courseCompletionButton.setText("Remove from completed");
             if (inProgress)
-                courseInProgressButton.setText("Remove from in progress");
+                courseInProgressButton.setText("Remove from in interested");
 
             courseDepartment.append(department);
             courseCode.append(code);
@@ -271,13 +271,13 @@ public class CourseDetailedView extends Activity {
             //listItem.setBackgroundColor(Color.parseColor("#32CD32"));
         }
         if (!inProgress) {
-            courseInProgressButton.setText("Set in progress");
+            courseInProgressButton.setText("Add to interested");
             courseInProgressButton.setBackgroundResource(android.R.drawable.btn_default);
             //listItem.setBackgroundResource(android.R.drawable.btn_default);
         }
 
         else {
-            courseInProgressButton.setText("Remove from in progress");
+            courseInProgressButton.setText("Remove from interested");
             courseInProgressButton.setBackgroundColor(Color.parseColor("#F0DD0E"));
             //listItem.setBackgroundColor(Color.parseColor("#F0DD0E"));
         }

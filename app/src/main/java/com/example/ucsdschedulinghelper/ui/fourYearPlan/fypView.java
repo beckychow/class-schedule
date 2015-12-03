@@ -16,6 +16,7 @@ import android.widget.ExpandableListView;
 
 import com.example.ucsdschedulinghelper.MajorChoiceActivity;
 import com.example.ucsdschedulinghelper.R;
+import com.example.ucsdschedulinghelper.ui.courseListView.ListViewLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +75,7 @@ public class fypView extends AppCompatActivity implements NavigationView.OnNavig
 
         if (id == R.id.nav_home) {
 
-            Intent intent = new Intent(this, MajorChoiceActivity.class);
+            Intent intent = new Intent(this, ListViewLoader.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_settings) {

@@ -42,7 +42,8 @@ import java.util.ArrayList;
  */
 public class ListViewLoader extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener, NavigationView.OnNavigationItemSelectedListener {
-    
+
+
     // This is the Adapter being used to display the list's data
     SimpleCursorAdapter mAdapter;
     SearchView mSearchView;
@@ -257,7 +258,7 @@ public class ListViewLoader extends ListActivity
 
         if (id == R.id.nav_home) {
 
-            Intent intent = new Intent(this, MajorChoiceActivity.class);
+            Intent intent = new Intent(this, ListViewLoader.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_settings) {
