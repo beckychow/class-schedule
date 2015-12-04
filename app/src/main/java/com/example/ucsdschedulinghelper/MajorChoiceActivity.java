@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 
 import java.util.concurrent.ExecutionException;
 
@@ -17,9 +20,9 @@ import com.example.ucsdschedulinghelper.parser.PlanParser;
 import com.example.ucsdschedulinghelper.ui.courseListView.ListViewLoader;
 import com.example.ucsdschedulinghelper.ui.fourYearPlan.fypView;
 
-public class MajorChoiceActivity extends AppCompatActivity {
+public class MajorChoiceActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private String majorCode = "";
+    private String majorCode, collegeCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -33,6 +36,8 @@ public class MajorChoiceActivity extends AppCompatActivity {
         findViewById(R.id.buttonToFourYearPlan).setBackgroundResource(android.R.drawable.btn_default);
         findViewById(R.id.buttonToCourseListView).setBackgroundResource(android.R.drawable.btn_default);
 
+        Spinner spinner = (Spinner) findViewById(R.id.college_spinner);
+        spinner.setOnItemSelectedListener(this);
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -85,11 +90,10 @@ public class MajorChoiceActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static final int REQUEST_CODE = 01;
     public void submitInfo(View view) {
         updateButtons(false, true);
         try {
-            parsePlan("WA", majorCode);
+            parsePlan(collegeCode, majorCode);
         }
         catch (Exception e) {
             Log.e(getLocalClassName(), "parsePlan()" + e);
@@ -99,11 +103,13 @@ public class MajorChoiceActivity extends AppCompatActivity {
     public void showCourseList(View view) {
         Intent intent = new Intent(this, ListViewLoader.class);
         startActivity(intent);
+        finish();
     }
 
     public void showFourYearPlan(View view) {
         Intent intent = new Intent(this, fypView.class);
         startActivity(intent);
+        finish();
     }
 
     // Selecting major through Radio Buttons
@@ -137,6 +143,32 @@ public class MajorChoiceActivity extends AppCompatActivity {
         findViewById(R.id.buttonSubmitInfo).setEnabled(submissionAccess);
         findViewById(R.id.buttonToCourseListView).setEnabled(navigationAccess);
         findViewById(R.id.buttonToFourYearPlan).setEnabled(navigationAccess);
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        String[] college = getResources().getStringArray(R.array.college);
+        String[] code = getResources().getStringArray(R.array.college_codes);
+        String selectedCollege = (String) parent.getItemAtPosition(pos);
+
+        if (selectedCollege.equals(college[0]))
+            collegeCode = code[0];
+        else if (selectedCollege.equals(college[1]))
+            collegeCode = code[1];
+        else if (selectedCollege.equals(college[2]))
+            collegeCode = code[2];
+        else if (selectedCollege.equals(college[3]))
+            collegeCode = code[3];
+        else if (selectedCollege.equals(college[4]))
+            collegeCode = code[4];
+        else
+            collegeCode = code[5];
+
+        updateButtons(true, false);
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        String[] code = getResources().getStringArray(R.array.college_codes);
+        collegeCode = code[0];
     }
 
 }

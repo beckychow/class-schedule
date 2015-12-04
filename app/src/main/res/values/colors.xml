@@ -9,4 +9,6 @@
     <color name="light_blue">#6699ff</color>
     <color name="triton_blue">#27528C</color>
     <color name="dark_grey">#878788</color>
+    <color name="custom_pale_blue">#CCFFFF</color>
+    <color name="custom_pale_blue_2">#99FFFF</color>
 </resources>

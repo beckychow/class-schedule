@@ -2,15 +2,12 @@ package com.example.ucsdschedulinghelper.ui.fourYearPlan;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Context;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
@@ -19,7 +16,6 @@ import com.example.ucsdschedulinghelper.R;
 import com.example.ucsdschedulinghelper.ui.courseListView.ListViewLoader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -73,25 +69,30 @@ public class fypView extends AppCompatActivity implements NavigationView.OnNavig
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-
+        if (id == R.id.nav_course_list) {
             Intent intent = new Intent(this, ListViewLoader.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_settings) {
-
+            finish();
+        }
+        else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, MajorChoiceActivity.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_fyp) {
-
-            Intent intent = new Intent(this, fypView.class);
+            finish();
+        }
+        else if (id == R.id.nav_fyp) {
+            // already in this view
+        }
+        else if (id == R.id.nav_courses_completed) {
+            Intent intent = new Intent(this, ListViewLoader.class);
+            intent.putExtra(ListViewLoader.CONFIG, ListViewLoader.SHOW_ONLY_COMPLETED);
             startActivity(intent);
-
-        } else if (id == R.id.nav_cadd) {
-
-        } else if (id == R.id.nav_cip) {
-
+            finish();
+        }
+        else if (id == R.id.nav_courses_interested) {
+            Intent intent = new Intent(this, ListViewLoader.class);
+            intent.putExtra(ListViewLoader.CONFIG, ListViewLoader.SHOW_ONLY_INTERESTED);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

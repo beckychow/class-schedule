@@ -76,8 +76,8 @@ public class MajorChoiceListViewTest extends ActivityInstrumentationTestCase2<Ma
         /* Selecting major as Computer Science and college as Warren */
         onView(withId(R.id.cs_button)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.college_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Warren"))).perform(click()).check(matches(isDisplayed()));
-        onView(withId(R.id.college_spinner)).check(matches(withSpinnerText(containsString("Warren"))));
+        onData(allOf(is(instanceOf(String.class)), is("Earl Warren"))).perform(click()).check(matches(isDisplayed()));
+        onView(withId(R.id.college_spinner)).check(matches(withSpinnerText(containsString("Earl Warren"))));
         onView(withId(R.id.buttonSubmitInfo)).perform(click());
 
 

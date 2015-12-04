@@ -102,8 +102,8 @@ public class MajorChoiceActivityTest extends ActivityInstrumentationTestCase2<Ma
         // select major, college and submit
         onView(withId(R.id.cs_button)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.college_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Warren"))).perform(click()).check(matches(isDisplayed()));
-        onView(withId(R.id.college_spinner)).check(matches(withSpinnerText(containsString("Warren"))));
+        onData(allOf(is(instanceOf(String.class)), is("Earl Warren"))).perform(click()).check(matches(isDisplayed()));
+        onView(withId(R.id.college_spinner)).check(matches(withSpinnerText(containsString("Earl Warren"))));
         onView(withId(R.id.buttonSubmitInfo)).perform(click());
         // click button course list view and check if course list view is shown
         onView(withId(R.id.buttonToCourseListView)).perform(click());

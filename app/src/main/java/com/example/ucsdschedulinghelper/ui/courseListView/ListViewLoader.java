@@ -12,11 +12,9 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +41,9 @@ import java.util.ArrayList;
 public class ListViewLoader extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener, NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String CONFIG = "CONFIGURATION";
+    public static final String SHOW_ONLY_COMPLETED = "SHOW ONLY COMPLETED";
+    public static final String SHOW_ONLY_INTERESTED = "SHOW ONLY INTERESTED";
 
     // This is the Adapter being used to display the list's data
     SimpleCursorAdapter mAdapter;
@@ -60,9 +61,10 @@ public class ListViewLoader extends ListActivity
     };
 
     // This is the select criteria
-    private static String SELECTION = "";
+    private static String SELECTION = null;
     private String[] selectionArgs = null;
-    private static String sortOrder = "";
+    private static String sortOrder = null;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -93,23 +95,36 @@ public class ListViewLoader extends ListActivity
                 R.id.list_item_text_title,
                 R.id.list_item_text_id};
 
-        // Create an empty adapter we will use to display the loaded data.
-        // We pass null for the cursor, then update it in onLoadFinished()
-        mAdapter = new SimpleCursorAdapter(this, R.layout.course_list_item, null,
-                fromColumns, toViews, 0);
-        setListAdapter(mAdapter);
-
-        // Prepare the loader. Either re-connect with an existing one,
-        // or start a new one.
-        getLoaderManager().initLoader(0, null, this);
-
-
         setContentView(R.layout.nav_drawer_list);
         mSearchView = (SearchView) findViewById(R.id.list_search);
         mListView = (ListView) findViewById(android.R.id.list);
         mListView.setTextFilterEnabled(true);
         setupSearchView();
 
+        if (getIntent().hasExtra(CONFIG)) {
+            String requestedConfig = getIntent().getStringExtra(CONFIG);
+            if (requestedConfig.equals(SHOW_ONLY_COMPLETED)) {
+                SELECTION = CoursesCollectionContract.Course.COLUMN_COMPLETED + " = 1";
+                hideSearch();
+            } else if (requestedConfig.equals(SHOW_ONLY_INTERESTED)) {
+                SELECTION = CoursesCollectionContract.Course.COLUMN_SOI + " = 1";
+                hideSearch();
+            }
+        }
+        else {
+            SELECTION = "";
+        }
+
+        // Create an empty adapter we will use to display the loaded data.
+        // We pass null for the cursor, then update it in onLoadFinished()
+        mAdapter = new SimpleCursorAdapter(this, R.layout.course_list_item, null,
+                fromColumns, toViews, 0);
+
+        setListAdapter(mAdapter);
+
+        // Prepare the loader. Either re-connect with an existing one,
+        // or start a new one.
+        getLoaderManager().initLoader(0, null, this);
 
         /* Navigation Drawer */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -181,6 +196,10 @@ public class ListViewLoader extends ListActivity
 
         //View.OnFocusChangeListener onFocusChangeListener = new FocusChangeListener(this);
         //mSearchView.setOnFocusChangeListener(onFocusChangeListener);
+    }
+
+    private void hideSearch() {
+        mSearchView.setVisibility(View.GONE);
     }
 
     @Override
@@ -256,25 +275,32 @@ public class ListViewLoader extends ListActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-
+        if (id == R.id.nav_course_list) {
             Intent intent = new Intent(this, ListViewLoader.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_settings) {
-
+            finish();
+        }
+        else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, MajorChoiceActivity.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_fyp) {
-
+            finish();
+        }
+        else if (id == R.id.nav_fyp) {
             Intent intent = new Intent(this, fypView.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_cadd) {
-
-        } else if (id == R.id.nav_cip) {
-
+            finish();
+        }
+        else if (id == R.id.nav_courses_completed) {
+            Intent intent = new Intent(this, ListViewLoader.class);
+            intent.putExtra(ListViewLoader.CONFIG, ListViewLoader.SHOW_ONLY_COMPLETED);
+            startActivity(intent);
+            finish();
+        }
+        else if (id == R.id.nav_courses_interested) {
+            Intent intent = new Intent(this, ListViewLoader.class);
+            intent.putExtra(ListViewLoader.CONFIG, ListViewLoader.SHOW_ONLY_INTERESTED);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

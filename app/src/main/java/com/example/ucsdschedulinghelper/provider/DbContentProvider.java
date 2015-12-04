@@ -26,16 +26,16 @@ public class DbContentProvider extends ContentProvider {
     private static final String EQUALS = " = ";
     private static final String UNKNOWN_URI = "Unknown URI: ";
 
-    private static final int COURSES = 00;
-    private static final int COURSES_ITEM_ID = 01;
-    private static final int COURSES_RESET_UPDATED = 03;
-    private static final int COURSES_DELETE_OLD = 04;
+    private static final int COURSES = 10;
+    private static final int COURSES_ITEM_ID = 11;
+    private static final int COURSES_RESET_UPDATED = 13;
+    private static final int COURSES_DELETE_OLD = 14;
 
-    private static final int PLAN = 10;
-    private static final int PLAN_ITEM_ID = 11;
-    private static final int PLAN_ALL = 12;
-    private static final int PLAN_RESET_UPDATED = 13;
-    private static final int PLAN_DELETE_OLD = 14;
+    private static final int PLAN = 20;
+    private static final int PLAN_ITEM_ID = 21;
+    private static final int PLAN_ALL = 22;
+    private static final int PLAN_RESET_UPDATED = 23;
+    private static final int PLAN_DELETE_OLD = 24;
 
     private static final int FALSE = 0;
 

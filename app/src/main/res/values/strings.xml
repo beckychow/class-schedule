@@ -13,13 +13,22 @@
     <string name="cape">CAPE</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="empty_list">No courses to show</string>
 
     <string-array name="college">
         <item>Revelle</item>
-        <item>Warren</item>
-        <item>Muir</item>
+        <item>Earl Warren</item>
+        <item>John Muir</item>
         <item>Eleanor Roosevelt</item>
-        <item>Marshall</item>
+        <item>Thurgood Marshall</item>
         <item>Sixth</item>
+    </string-array>
+    <string-array name="college_codes">
+        <item>RE</item>
+        <item>WA</item>
+        <item>MU</item>
+        <item>FI</item>
+        <item>TH</item>
+        <item>SI</item>
     </string-array>
 </resources>

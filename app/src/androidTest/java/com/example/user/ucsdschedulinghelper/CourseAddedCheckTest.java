@@ -83,8 +83,8 @@ public class CourseAddedCheckTest extends ActivityInstrumentationTestCase2<Major
         /* Selecting major as Computer Engineering and college as Muir */
         onView(withId(R.id.comp_eng_button)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.college_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Muir"))).perform(click()).check(matches(isDisplayed()));
-        onView(withId(R.id.college_spinner)).check(matches(withSpinnerText(containsString("Muir"))));
+        onData(allOf(is(instanceOf(String.class)), is("John Muir"))).perform(click()).check(matches(isDisplayed()));
+        onView(withId(R.id.college_spinner)).check(matches(withSpinnerText(containsString("John Muir"))));
         onView(withId(R.id.buttonSubmitInfo)).perform(click());
 
 

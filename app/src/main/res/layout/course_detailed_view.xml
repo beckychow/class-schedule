@@ -3,6 +3,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@drawable/gradient_theme_bg">
+
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,39 +69,29 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             />
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <Button
+            android:id="@+id/course_detailed_button_completion"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:paddingTop="10dp">
+            android:onClick="courseSetCompleted"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp" />
 
-            <Button
-                android:id="@+id/course_detailed_button_completion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="courseSetCompleted"
-                android:text="Add to completed" />
-
-            <Button
-                android:id="@+id/course_detailed_button_inprogress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="courseSetInProgress"
-                android:text="Set in progress" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/course_detailed_button_inprogress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="courseSetInterested"
+            android:paddingTop="25dp"
+            android:paddingLeft="10dp" />
 
         <Button android:id="@+id/button_cape"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cape"
             android:onClick="showCape"
-            android:layout_gravity="center_horizontal"/>
-
-
-
-
-
+            android:layout_gravity="right"
+            android:paddingTop="25dp" />
     </LinearLayout>
 </ScrollView>

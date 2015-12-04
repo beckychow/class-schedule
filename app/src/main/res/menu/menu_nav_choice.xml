@@ -1,26 +1,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/drawer_group_1"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_course_list"
             android:title="List of Classes" />
         <item
             android:id="@+id/nav_fyp"
             android:title="Four Year Plan" />
+    </group>
+
+    <group android:id="@+id/drawer_group_2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_courses_completed"
+            android:title="Classes Completed" />
+        <item
+            android:id="@+id/nav_courses_interested"
+            android:title="Classes of Interest" />
+    </group>
+
+    <group android:id="@+id/drawer_group_3"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_settings"
             android:title="Major Selection Settings" />
     </group>
-
-    <item android:title="Classes">
-        <menu>
-            <item
-                android:id="@+id/nav_cadd"
-                android:title="Classes Completed" />
-            <item
-                android:id="@+id/nav_cip"
-                android:title="Classes of Interest" />
-        </menu>
-    </item>
 
 </menu>

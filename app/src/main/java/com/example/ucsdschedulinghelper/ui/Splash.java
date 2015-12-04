@@ -23,7 +23,7 @@ import android.widget.Toast;
 public class Splash extends Activity {
 
     //Set waktu lama splashscreen
-    private static int splashInterval = 4000;
+    private static int splashInterval = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,6 @@ public class Splash extends Activity {
             }
         }, splashInterval);
 
-    };
+    }
 
 }

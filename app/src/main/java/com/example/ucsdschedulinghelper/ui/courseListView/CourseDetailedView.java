@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -16,7 +15,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +30,8 @@ public class CourseDetailedView extends Activity {
 
     private Uri courseUri;
     private boolean completed;
-    private boolean inProgress;
-    private Button courseCompletionButton, courseInProgressButton, courseCapeButton;
-    private ListView listItem;
+    private boolean interested;
+    private Button courseCompletionButton, courseInterestedButton, courseCapeButton;
     private SpannableString prerequisitesWithLinks;
     private String department, code;
 
@@ -45,10 +42,10 @@ public class CourseDetailedView extends Activity {
         setContentView(R.layout.course_detailed_view);
 
         courseCompletionButton = (Button) findViewById(R.id.course_detailed_button_completion);
-        courseInProgressButton = (Button) findViewById(R.id.course_detailed_button_inprogress);
+        courseInterestedButton = (Button) findViewById(R.id.course_detailed_button_inprogress);
+
         courseCapeButton = (Button) findViewById(R.id.button_cape);
         courseCapeButton.setBackgroundResource(android.R.drawable.btn_default);
-        //listItem = (ListView) findViewById(android.R.id.course_list_item);
         courseUri = getIntent().getExtras().getParcelable(DbContentProvider.CONTENT_COURSES_ITEM_TYPE);
         fillData(courseUri);
         updateButtons();
@@ -63,7 +60,7 @@ public class CourseDetailedView extends Activity {
                 CoursesCollectionContract.Course.COLUMN_DESCRIPTION,
                 CoursesCollectionContract.Course.COLUMN_UNITS,
                 CoursesCollectionContract.Course.COLUMN_COMPLETED,
-                CoursesCollectionContract.Course.COLUMN_IN_PROGRESS,
+                CoursesCollectionContract.Course.COLUMN_SOI,
                 CoursesCollectionContract.Course.COLUMN_PREREQUISITES };
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
 
@@ -91,10 +88,10 @@ public class CourseDetailedView extends Activity {
                 completed = true;
 
             if (cursor.getInt(cursor.getColumnIndexOrThrow(
-                    CoursesCollectionContract.Course.COLUMN_IN_PROGRESS)) == 0)
-                inProgress = false;
+                    CoursesCollectionContract.Course.COLUMN_SOI)) == 0)
+                interested = false;
             else
-                inProgress = true;
+                interested = true;
 
             TextView courseDepartment = (TextView) findViewById(R.id.course_detailed_text_department);
             TextView courseCode = (TextView) findViewById(R.id.course_detailed_text_code);
@@ -103,10 +100,7 @@ public class CourseDetailedView extends Activity {
             TextView courseUnits = (TextView) findViewById(R.id.course_detailed_text_units);
             TextView coursePrerequisites = (TextView) findViewById(R.id.course_detailed_text_prerequisites);
 
-            if (completed)
-                courseCompletionButton.setText("Remove from completed");
-            if (inProgress)
-                courseInProgressButton.setText("Remove from in interested");
+            updateButtons();
 
             courseDepartment.append(department);
             courseCode.append(code);
@@ -134,7 +128,8 @@ public class CourseDetailedView extends Activity {
                 CoursesCollectionContract.Course._ID,
                 CoursesCollectionContract.Course.COLUMN_ENTRY_ID,
                 CoursesCollectionContract.Course.COLUMN_DEPARTMENT,
-                CoursesCollectionContract.Course.COLUMN_CODE };
+                CoursesCollectionContract.Course.COLUMN_CODE,
+                CoursesCollectionContract.Course.COLUMN_COMPLETED};
 
         for (int currentIndex = 0; currentIndex < prerequisites.length(); currentIndex++) {
 
@@ -222,8 +217,10 @@ public class CourseDetailedView extends Activity {
                     String courseId = cursor.getString(cursor.getColumnIndexOrThrow(
                             CoursesCollectionContract.Course._ID));
                     String courseTitle = department + space + code;
+                    int completed = cursor.getInt(cursor.getColumnIndexOrThrow(
+                            CoursesCollectionContract.Course.COLUMN_COMPLETED));
 
-                    prerequisitesWithLinks.setSpan(new MyClickableSpan(courseId, courseTitle),
+                    prerequisitesWithLinks.setSpan(new MyClickableSpan(courseId, courseTitle, completed),
                             linkStart, currentIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 cursor.close();
@@ -241,45 +238,46 @@ public class CourseDetailedView extends Activity {
         values.put(CoursesCollectionContract.Course.COLUMN_COMPLETED, !completed);
         if (!completed) {
             values.put(CoursesCollectionContract.Course.COLUMN_IN_PROGRESS, false);
-            inProgress = false;
+            values.put(CoursesCollectionContract.Course.COLUMN_SOI, false);
+            interested = false;
         }
         getContentResolver().update(courseUri, values, null, null);
         completed = !completed;
         updateButtons();
     }
 
-    public void courseSetInProgress(View v) {
+    public void courseSetInterested(View v) {
         ContentValues values = new ContentValues();
-        values.put(CoursesCollectionContract.Course.COLUMN_IN_PROGRESS, !inProgress);
+        values.put(CoursesCollectionContract.Course.COLUMN_SOI, !interested);
         getContentResolver().update(courseUri, values, null, null);
-        inProgress = !inProgress;
+        interested = !interested;
         updateButtons();
     }
 
     public void updateButtons() {
+        String addToCompleted = "Add to completed";
+        String removeFromCompleted = "Remove from completed";
+        String addToInterested = "Add to interested";
+        String removeFromInterested = "Remove from interested";
+
         if (!completed) {
-            courseCompletionButton.setText("Add to completed");
-            courseInProgressButton.setEnabled(true);
+            courseCompletionButton.setText(addToCompleted);
             courseCompletionButton.setBackgroundResource(android.R.drawable.btn_default);
-            //listItem.setBackgroundResource(android.R.drawable.btn_default);
+            courseInterestedButton.setEnabled(true);
         }
-
         else {
-            courseCompletionButton.setText("Remove from completed");
-            courseInProgressButton.setEnabled(false);
+            courseCompletionButton.setText(removeFromCompleted);
+            courseInterestedButton.setEnabled(false);
             courseCompletionButton.setBackgroundColor(Color.parseColor("#32CD32"));
-            //listItem.setBackgroundColor(Color.parseColor("#32CD32"));
-        }
-        if (!inProgress) {
-            courseInProgressButton.setText("Add to interested");
-            courseInProgressButton.setBackgroundResource(android.R.drawable.btn_default);
-            //listItem.setBackgroundResource(android.R.drawable.btn_default);
         }
 
+        if (!interested) {
+            courseInterestedButton.setText(addToInterested);
+            courseInterestedButton.setBackgroundResource(android.R.drawable.btn_default);
+        }
         else {
-            courseInProgressButton.setText("Remove from interested");
-            courseInProgressButton.setBackgroundColor(Color.parseColor("#F0DD0E"));
-            //listItem.setBackgroundColor(Color.parseColor("#F0DD0E"));
+            courseInterestedButton.setText(removeFromInterested);
+            courseInterestedButton.setBackgroundColor(Color.parseColor("#F0DD0E"));
         }
     }
 
@@ -287,17 +285,14 @@ public class CourseDetailedView extends Activity {
         return this;
     }
 
-    /*
-     * The template from stackoverflow was taken as basis,
-     * but was changed to suit our purposes.
-     */
-    class MyClickableSpan extends ClickableSpan { //clickable span
-        private String id;
-        private String str;
+    class MyClickableSpan extends ClickableSpan {
+        private String id, str;
+        private int status;
 
-        public MyClickableSpan(String id, String str) {
+        public MyClickableSpan(String id, String str, int status) {
             this.id = id;
             this.str = str;
+            this.status = status;
         }
 
         @Override
@@ -308,12 +303,14 @@ public class CourseDetailedView extends Activity {
             startActivity(intent);
             finish();
 
-            Toast.makeText(CourseDetailedView.this, "From " + str,
-            Toast.LENGTH_SHORT).show();
+            Toast.makeText(CourseDetailedView.this, "From " + str, Toast.LENGTH_SHORT).show();
         }
         @Override
         public void updateDrawState(TextPaint ds) {
-            ds.setColor(Color.parseColor("#0099FF")); // set text color
+            if (status == 0)
+                ds.setColor(Color.parseColor("#0099FF")); // set default text color
+            else
+                ds.setColor(Color.parseColor("#32CD32"));
             ds.setUnderlineText(false); // remove the underline
         }
     }
