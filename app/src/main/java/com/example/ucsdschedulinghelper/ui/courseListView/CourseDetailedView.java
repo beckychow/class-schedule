@@ -42,7 +42,7 @@ public class CourseDetailedView extends Activity {
         setContentView(R.layout.course_detailed_view);
 
         courseCompletionButton = (Button) findViewById(R.id.course_detailed_button_completion);
-        courseInterestedButton = (Button) findViewById(R.id.course_detailed_button_inprogress);
+        courseInterestedButton = (Button) findViewById(R.id.course_detailed_button_interested);
 
         courseCapeButton = (Button) findViewById(R.id.button_cape);
         courseCapeButton.setBackgroundResource(android.R.drawable.btn_default);

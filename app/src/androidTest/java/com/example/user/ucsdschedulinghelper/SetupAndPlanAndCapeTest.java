@@ -53,11 +53,11 @@ import static org.hamcrest.CoreMatchers.*;
  * then the detailed description will show again.
  */
 
-public class MajorChoiceActivityTest extends ActivityInstrumentationTestCase2<MajorChoiceActivity>{
+public class SetupAndPlanAndCapeTest extends ActivityInstrumentationTestCase2<MajorChoiceActivity>{
 
     private MajorChoiceActivity majorChoiceActivity;
 
-    public MajorChoiceActivityTest() {
+    public SetupAndPlanAndCapeTest() {
         super(MajorChoiceActivity.class);
     }
 

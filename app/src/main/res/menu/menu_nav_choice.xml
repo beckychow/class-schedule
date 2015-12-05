@@ -4,27 +4,27 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_course_list"
-            android:title="List of Classes" />
+            android:title="@string/drawer_classes" />
         <item
             android:id="@+id/nav_fyp"
-            android:title="Four Year Plan" />
+            android:title="@string/drawer_fyp" />
     </group>
 
     <group android:id="@+id/drawer_group_2"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_courses_completed"
-            android:title="Classes Completed" />
+            android:title="@string/drawer_courses_completed" />
         <item
             android:id="@+id/nav_courses_interested"
-            android:title="Classes of Interest" />
+            android:title="@string/drawer_courses_interested" />
     </group>
 
     <group android:id="@+id/drawer_group_3"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_settings"
-            android:title="Major Selection Settings" />
+            android:title="@string/drawer_settings" />
     </group>
 
 </menu>

@@ -6,14 +6,23 @@
     <string name="submit">Submit</string>
     <string name="course_view">List of Courses</string>
     <string name="fyp">Four Year Plan</string>
+
     <string name="computer_science">Computer Science (B.S.)</string>
     <string name="cs_bio">Computer Science with Bioinformatics</string>
     <string name="computer_engineering">Computer Engineering</string>
     <string name="computer_science_ba">Computer Science (B.A.)</string>
+
     <string name="cape">CAPE</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="empty_list">No courses to show</string>
+
+    <string name="drawer_classes">List of Classes</string>
+    <string name="drawer_fyp">Four Year Plan</string>
+    <string name="drawer_settings">Major Selection Settings</string>
+    <string name="drawer_courses_interested">Courses of Interest</string>
+    <string name="drawer_courses_completed">Courses Completed</string>
 
     <string-array name="college">
         <item>Revelle</item>
